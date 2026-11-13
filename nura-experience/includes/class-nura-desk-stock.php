@@ -487,7 +487,7 @@ class NURAX_Desk_Stock {
 	}
 
 	/* ------------------------------------------------------------------ */
-	/* Opening buying prices (register NURA-STK-OS-2026-001 v4.0)          */
+	/* Opening buying prices (register NURA-STK-OS-2026-001 v4.1)          */
 	/* ------------------------------------------------------------------ */
 
 	/**
@@ -498,10 +498,10 @@ class NURAX_Desk_Stock {
 	 */
 	public static function opening_costs() {
 		return array(
-			array( 364, 'Loose Wave Frontal', array( 'black', 'burgundy', '33', 'red wine', '30' ), '1930.59' ),
-			array( 243, '4x4 Loose Wave Closure', array( 'black', 'c33', '33', 'c1 99j', '99j' ), '1602.50' ),
-			array( 274, 'Bone Straight High Fibre', array( 'black', '613', 'dark piano', 'piano dark' ), '2483.33' ),
-			array( 377, 'Body Wave', array( 'black', '613', 'piano', 'piano dark', 'dark piano' ), '2450.00' ),
+			array( 364, 'Loose Wave Frontal', array( 'black', 'burgundy', '33', 'red wine', '30' ), '1934.88' ),
+			array( 243, '4x4 Loose Wave Closure', array( 'black', 'c33', '33', 'c1 99j', '99j' ), '1606.78' ),
+			array( 274, 'Bone Straight High Fibre', array( 'black', '613', 'dark piano', 'piano dark' ), '2488.59' ),
+			array( 377, 'Body Wave', array( 'black', '613', 'piano', 'piano dark', 'dark piano' ), '2456.55' ),
 		);
 	}
 
@@ -788,7 +788,7 @@ class NURAX_Desk_Stock {
 
 	private static function screen_costs() {
 		$done = get_option( self::COSTS );
-		echo '<p>Buying price per piece from the opening stock register (NURA-STK-OS-2026-001 v4.0): the average making cost of each wig line (bundles, ventilation, wig cap and labour). Only colours that match a website product are listed. Bob Amanda, Empress, Wonderful Frontal, 2x2 Negatron and Loose Wave Frontal 2/30 are left out until their website products are decided. Stock numbers are not changed here.</p>';
+		echo '<p>Buying price per piece from the opening stock register (NURA-STK-OS-2026-001 v4.1): the average making cost of each wig line (bundles, ventilation, wig cap, labour and materials transport). Only colours that match a website product are listed. Bob Amanda, Empress, Wonderful Frontal, 2x2 Negatron and Loose Wave Frontal 2/30 are left out until their website products are decided. Stock numbers are not changed here.</p>';
 		if ( $done ) {
 			echo '<p class="ns-in">Loaded on ' . esc_html( NURAX_Desk::date_label( $done, 'j M Y H:i' ) ) . '. Saving again overwrites the buying prices of these colours.</p>';
 		}
@@ -932,12 +932,12 @@ class NURAX_Desk_Stock {
 				$v->update_meta_data( '_nura_cost', wc_format_decimal( $c[3] ) );
 				$v->save_meta_data();
 				$q = $v->managing_stock() ? (int) $v->get_stock_quantity( 'edit' ) : null;
-				self::log( $v->get_id(), 0, $q, $q, 'cost', array( 'note' => 'Buying price ' . $c[3] . ' (opening register v4.0)' ) );
+				self::log( $v->get_id(), 0, $q, $q, 'cost', array( 'note' => 'Buying price ' . $c[3] . ' (opening register v4.1)' ) );
 			}
 		}
 		update_option( self::COSTS, current_time( 'mysql' ), false );
 		if ( class_exists( 'NURAX_Staff' ) ) {
-			NURAX_Staff::log( 'product', 'Opening buying prices loaded from stock register v4.0' );
+			NURAX_Staff::log( 'product', 'Opening buying prices loaded from stock register v4.1' );
 		}
 		self::back( 'costs', 'costs' );
 	}

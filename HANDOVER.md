@@ -1,6 +1,6 @@
 # HANDOVER - NURA Stocks (read this first)
 
-Last updated: 14 Nov 2026, 00:40 EAT, by Town assistant (Ray). Next agent: read this file, then `PRD.md`, then `AGENTS.md`, then the website repo's `AGENTS.md`, `PROJECT-STATUS.md` and `HANDOVER.md` ([moselanto/nurabeauty.co.ke](https://github.com/moselanto/nurabeauty.co.ke)).
+Last updated: 14 Nov 2026, 00:35 EAT, by Town assistant (Ray). Next agent: read this file, then `PRD.md`, then `AGENTS.md`, then the website repo's `AGENTS.md`, `PROJECT-STATUS.md` and `HANDOVER.md` ([moselanto/nurabeauty.co.ke](https://github.com/moselanto/nurabeauty.co.ke)).
 
 ## 1. What this project is
 
@@ -14,8 +14,8 @@ Website live versions at hand-over: theme 1.134.0, plugin `nura-experience` 1.10
 |---|---|
 | Plan (`PRD.md`) and rules (`AGENTS.md`) | Done, owner decisions recorded |
 | Opening stock count (13 Nov 2026) | Done, confirmed by owner |
-| Opening stock register XLSX | Done, **v4.0** (`data/`) - actual making costs |
-| Opening stock CSV + notes | Done, match v4.0 |
+| Opening stock register XLSX | Done, **v4.1** (`data/`) - actual making costs + transport, total KES 85,375 |
+| Opening stock CSV + notes | Done, match v4.1 |
 | Stock lines -> website products mapping | Draft (`data/opening-stock-woocommerce-map.md`), 6 lines unmatched |
 | **NURA Desk Stock tab (code)** | **Built 14 Nov as plugin 1.110.0, PHP lint clean. In this repo under `nura-experience/` only - NOT yet in the website repo, NOT yet installed or tested on the live site.** |
 
@@ -23,15 +23,15 @@ Website live versions at hand-over: theme 1.134.0, plugin `nura-experience` 1.10
 
 | | Pieces | Value at cost (KES) |
 |---|---|---|
-| On the shelf (delivery received 13 Nov) | **26** | **47,910.49** |
-| Awaiting the vendor | **17** | 37,264.51 |
-| Total in the owner's stock book | **43** | 85,175.00 |
+| On the shelf (delivery received 13 Nov) | **26** | **48,020.87** |
+| Awaiting the vendor | **17** | 37,354.13 |
+| Total in the owner's stock book | **43** | 85,375.00 |
 
 - Only the 26 pieces delivered on 13 Nov are on the shelf (owner, 13 Nov). Nothing else is in stock.
 - Stock book quantities = what was ordered from the vendor. Ordered total 42; Loose Wave Frontal colour 33 was ordered 3 and received 4 (1 over-delivered), so the book total is 43.
 - Awaiting vendor (17): Body Wave 6 (Piano Dark 2, 613 2, Black 2); Bone Straight High Fibre 4 (613 2, Piano Dark 2); Loose Wave Frontal 2 (Burgundy 1, colour 30 1); Bob Amanda 2 (99J 1, 30 1); Empress 2 (1B 1, 1/33 1); Wonderful Frontal 1 (Black).
 - Delivery list wording: the 4x4 closure "burgundy x 2" = the stock book's "99J x 2" (treated as the same 2 pieces).
-- Costs (owner, 13 Nov, replaces the earlier per-piece buying prices): every wig is made from scratch (bundles, ventilation, wig cap, labour). Actual cost per product line: Loose Wave Frontal 32,820; Loose Wave 4x4 Closure 9,615; Bone Straight High Fibre 14,900; Body Wave 14,700; Bob Amanda 7,340; Empress 4,100; Wonderful Frontal (new trial) 1,000; 2x2 Negatron Closure (new trial) 700 = KES 85,175. Unit cost = weighted average per piece (line total / pieces in stock book): Loose Wave Frontal 1,930.59; Loose Wave 4x4 Closure 1,602.50; Bone Straight High Fibre 2,483.33; Body Wave 2,450.00; Bob Amanda 1,835.00; Empress 2,050.00; Wonderful Frontal 1,000.00; 2x2 Negatron Closure 700.00. These are the values to enter as the website "Buying price" (`_nura_cost`). **Open:** owner wrote totals of 75,065 (main batch) and 85,375; his line amounts add to 74,865 and 85,175 - ask which line carries the extra KES 200.
+- Costs (owner, 13-14 Nov; replace the earlier per-piece buying prices): every wig is made from scratch (bundles, ventilation, wig cap, labour). The KES 200 that was missing from the line amounts is transport for the wig maker to collect materials. It is a shared main-batch cost, spread over the main-batch lines in proportion to cost. Line totals: Loose Wave Frontal 32,892.96; Loose Wave 4x4 Closure 9,640.69; Bone Straight High Fibre 14,931.52; Body Wave 14,739.27; Bob Amanda 7,359.61; Empress 4,110.95; Wonderful Frontal (new trial) 1,000.00; 2x2 Negatron Closure (new trial) 700.00 = KES 85,375.00. Unit cost = weighted average per piece (line total / pieces in stock book): Loose Wave Frontal 1,934.88; Loose Wave 4x4 Closure 1,606.78; Bone Straight High Fibre 2,488.59; Body Wave 2,456.55; Bob Amanda 1,839.90; Empress 2,055.47; Wonderful Frontal 1,000.00; 2x2 Negatron Closure 700.00. These are the plugin's opening buying prices (`_nura_cost`).
 - SKU format: `NURA-<line>-<colour>` (e.g. `NURA-LWF-33`); `/` in a colour code becomes `-`.
 
 ## 4. Files in this repo
@@ -42,7 +42,7 @@ Website live versions at hand-over: theme 1.134.0, plugin `nura-experience` 1.10
 | `PRD.md` | Plan, phases, owner decisions |
 | `AGENTS.md` | Rules for agents/developers |
 | `HANDOVER.md` | This file |
-| `data/NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx` | Register v4.0: Summary, Dashboard (pie, doughnut, bar, stacked column), Stock Register, Goods Received, Supplier Variances, Notes |
+| `data/NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx` | Register v4.1: Summary, Dashboard (pie, doughnut, bar, stacked column), Stock Register, Goods Received, Supplier Variances, Notes |
 | `data/opening-stock-2026-11-13.csv` | Machine-readable stock lines (use this for loading counts) |
 | `data/opening-stock-2026-11-13.md` | Human-readable table and totals |
 | `data/opening-stock-woocommerce-map.md` | Draft line -> WooCommerce product/colour map |
@@ -85,7 +85,7 @@ Files in this repo (same paths as the website repo; base = website `main` at e58
   - WhatsApp: reserve on `nurax_wa_order_saved` (decrease WC stock, hold `active`); `_nwo_pay`=paid -> `sold`; `_nwo_status`=cancelled -> stock back, `released`; `_nwo_wc_order` set by the till -> released first (WC order deducts itself). Paystack-paid orders go straight to `sold`. Only stock-managed items are held.
   - Plans: read-only, counts `stock_reserved = 1` rows. On shelf = WC stock + plan holds + active WhatsApp holds.
   - Every other WC stock change (orders, product edits) is logged via `woocommerce_*_set_stock` hooks.
-  - Opening buying prices: sets `_nura_cost` on matched colours of products 364, 243, 274, 377 to the v4.0 averages (1930.59 / 1602.50 / 2483.33 / 2450.00). Unmatched lines (Bob Amanda, Empress, Wonderful Frontal, Negatron, LWF 2/30) excluded. Does not change stock numbers.
+  - Opening buying prices: sets `_nura_cost` on matched colours of products 364, 243, 274, 377 to the v4.1 averages (1934.88 / 1606.78 / 2488.59 / 2456.55). Unmatched lines (Bob Amanda, Empress, Wonderful Frontal, Negatron, LWF 2/30) excluded. Does not change stock numbers.
 - `nura-experience/includes/class-nura-desk.php`: Stock tab in `header()`, page in `assets()` list, `stock_places` default/field/save.
 - `nura-experience/includes/class-nura-staff.php`: permission `stock` (default on for shop managers), label, log area `stock`, perms form group "Stock".
 - `nura-experience/nura-experience.php`: require + `new NURAX_Desk_Stock()`, version 1.110.0.
@@ -103,9 +103,8 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 
 ## 7. Waiting on the owner
 
-- 14 Nov message left blanks: which Loose Wave Frontal gets the colour-30 cost (3,210), which piece gets the other LWF 2,300, which Bone Straight colour gets the 3,100, and which product carries the extra KES 200. Register stays v4.0 until answered.
+- 14 Nov message left blanks: which Loose Wave Frontal gets the colour-30 cost (3,210), which piece gets the other LWF 2,300, which Bone Straight colour gets the 3,100. Until answered they are averaged across their line. (The extra KES 200 is answered: materials transport, in v4.1.)
 
-- Which product line carries the extra KES 200 (written totals 75,065 / 85,375 vs line amounts 74,865 / 85,175).
 
 - Names of stock locations (he will enter them in Settings) and which items are where.
 - Website mapping decisions: Loose Wave Frontal Black colour 1 vs colour 2 (website has one "Black"); 4x4 closure 99J vs website "C1 99J"; Body Wave Piano Dark vs website "Piano"; colour 2/30 (no website option); new products for Bob Amanda, Empress, Wonderful Frontal, 2x2 Negatron (need selling prices and photos). Until then these lines are not loaded.
@@ -124,4 +123,5 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 | 13 Nov 2026 | Ray | v3.1 Dashboard with charts | 44d3fa6 |
 | 13 Nov 2026 | Ray | HANDOVER.md for the next agent; README/PRD refreshed | 594afa3 |
 | 14 Nov 2026 | Ray | v4.0: actual making costs per product line, weighted average cost per piece; CSV, md, HANDOVER updated | 6c9ae35 |
-| 14 Nov 2026 | Ray | Stock tab built (plugin 1.110.0) in `nura-experience/`; not yet released | (this commit) |
+| 14 Nov 2026 | Ray | Stock tab built (plugin 1.110.0) in `nura-experience/`; not yet released | d9512bf |
+| 14 Nov 2026 | Ray | v4.1: KES 200 materials transport added (total 85,375); CSV, md, plugin buying prices updated | (this commit) |

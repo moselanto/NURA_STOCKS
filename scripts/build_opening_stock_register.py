@@ -14,7 +14,7 @@ LOGO = os.path.join(ROOT, "assets", "NURA_Beauty_Compact_Logo_Flat_Full_Colour_3
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "data", "NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx")
 TMP = os.path.join(ROOT, "assets")
 
-DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "4.0", "2026-11-13"
+DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "4.1", "2026-11-13"
 
 # product line code -> product name
 NAMES = {
@@ -34,7 +34,17 @@ COST_PARTS = {
     "WF":    [("Additional", 1000)],
     "NEG22": [("Additional", 700)],
 }
-LINE_TOTAL = {k: sum(a for _, a in v) for k, v in COST_PARTS.items()}
+# KES 200 transport for the wig maker to collect materials for the main batch (owner, 2026-11-14).
+# Shared cost of the whole batch (IAS 2 cost of purchase), allocated to the main-batch lines
+# in proportion to their main-batch cost; rounding difference goes to the largest line.
+TRANSPORT = 200
+_main = {k: sum(a for n, a in v if n in ("Main batch", "Extra bundles")) for k, v in COST_PARTS.items()}
+_mt = sum(_main.values())
+_alloc = {k: round(TRANSPORT * m / _mt, 2) for k, m in _main.items() if m}
+_alloc[max(_main, key=_main.get)] = round(_alloc[max(_main, key=_main.get)] + TRANSPORT - sum(_alloc.values()), 2)
+for k, a in _alloc.items():
+    COST_PARTS[k].append(("Transport share", a))
+LINE_TOTAL = {k: round(sum(a for _, a in v), 2) for k, v in COST_PARTS.items()}
 # line, colour, colour code, ordered, received, remark
 ITEMS = [
     ("LWF", "Black (colour 2)", "2", 3, 3, ""),
@@ -460,8 +470,8 @@ notes = [
     ("Pending delivery", "Ordered but not yet received. Not owned stock, so not included in stock on hand or stock value; shown separately as stock on order."),
     ("Over-delivered", "Received above the quantity ordered. Included in stock on hand and value; settle the extra piece with the supplier."),
     ("Measurement (IAS 2)", "Inventories are measured at the lower of cost and net realisable value (IAS 2 Inventories; IFRS for SMEs Section 13). Cost of conversion = materials (bundles, wig cap), ventilation and labour. Cost formula: weighted average cost per product line."),
-    ("Cost of making", "All wigs are made from scratch: bundles, ventilation, wig cap and labour. Actual cost per product line (KES, owner, " + AS_AT + "): " + "; ".join(NAMES[k] + " " + f"{LINE_TOTAL[k]:,.0f}" + (" (" + " + ".join(f"{n.lower()} {a:,.0f}" for n, a in v) + ")" if len(v) > 1 else "") for k, v in COST_PARTS.items()) + ". Total " + f"{sum(LINE_TOTAL.values()):,.0f}" + "."),
-    ("Unit costs used", "Weighted average cost per piece = product line total / pieces in the stock book for that line: " + "; ".join(f"{NAMES[k]} {LINE_TOTAL[k]:,.0f} / {BOOK_QTY[k]} = {LINES[k][1]:,.2f}" for k in NAMES) + "."),
+    ("Cost of making", "All wigs are made from scratch: bundles, ventilation, wig cap and labour. Actual cost per product line (KES, owner, " + AS_AT + "): " + "; ".join(NAMES[k] + " " + f"{LINE_TOTAL[k]:,.2f}" + (" (" + " + ".join(f"{n.lower()} {a:,.2f}" for n, a in v) + ")" if len(v) > 1 else "") for k, v in COST_PARTS.items()) + ". Total " + f"{sum(LINE_TOTAL.values()):,.2f}" + ", including KES 200 transport for the wig maker to collect materials, shared across the main batch in proportion to cost."),
+    ("Unit costs used", "Weighted average cost per piece = product line total / pieces in the stock book for that line: " + "; ".join(f"{NAMES[k]} {LINE_TOTAL[k]:,.2f} / {BOOK_QTY[k]} = {LINES[k][1]:,.2f}" for k in NAMES) + "."),
     ("Currency", "Kenya Shilling (KES), ISO 4217. Amounts to 2 decimal places."),
     ("Item codes (SKU)", "NURA-<product line>-<colour code>, e.g. NURA-LWF-33 = Loose Wave Frontal, colour 33. A slash in a colour code is written as a hyphen (1/33 = 1-33)."),
     ("Colour codes", "1 = jet black, 1B = off black, 2 = darkest brown, 30 / 33 = auburn tones, 99J = burgundy-plum, 613 = blonde, x/y = two-tone (ombre), BUR = burgundy, RW = red wine, PD = piano dark, BLK = black."),
