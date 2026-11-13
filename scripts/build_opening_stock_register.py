@@ -14,7 +14,7 @@ LOGO = os.path.join(ROOT, "assets", "NURA_Beauty_Compact_Logo_Flat_Full_Colour_3
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "data", "NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx")
 TMP = os.path.join(ROOT, "assets")
 
-DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "2.1", "2026-11-13"
+DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "2.2", "2026-11-13"
 
 # product line code -> (product name, unit cost KES)
 LINES = {
@@ -115,26 +115,25 @@ def cell(z, **k):
     return f(**d)
 
 def header_band(ws, ncols, title, sub, logo_h, rows_pt, col_px):
-    """Black band; logo placed in pixels, never moved or resized by cells."""
-    for r, h in enumerate(rows_pt):
+    """Black band in two parts: a logo block on its own rows, then the title rows below it.
+    Nothing is written beside the logo, and the logo is sized to fit its rows even if a
+    viewer ignores custom row heights (default 20 px rows), so it can never cover the sheet."""
+    logo_rows = 5 if logo_h > 70 else 4
+    logo_h = min(logo_h, logo_rows * 20 - 12)          # fits at default row height too
+    text_rows = [26, 18, 16]
+    rows = [20] * logo_rows + text_rows
+    for r, h in enumerate(rows):
         ws.set_row(r, h, band)
-    for c in range(ncols):
-        for r in range(len(rows_pt)):
+        for c in range(ncols):
             ws.write_blank(r, c, None, band)
-    band_px = sum(round(h * 4 / 3) for h in rows_pt)
     p, w = logo(logo_h)
-    ws.insert_image(0, 0, p, {"x_offset": 14, "y_offset": (band_px - logo_h) // 2, "object_position": 3,
+    ws.insert_image(0, 0, p, {"x_offset": 12, "y_offset": 8, "object_position": 3,
                               "description": "NURA Beauty logo", "decorative": False})
-    # title starts in the first column whose left edge clears the logo
-    x, start = 0, 0
-    for i, wpx in enumerate(col_px):
-        if x >= w + 30:
-            start = i; break
-        x += wpx
-    ws.write(1, start, title, band_title)
-    ws.write(2, start, sub, band_sub)
-    ws.write(3, start, f"Document {DOC_NO}  |  Version {VERSION}  |  As at {AS_AT}  |  Currency KES  |  UoM PCS", band_meta)
-    r = len(rows_pt)
+    t = 0 if col_px[0] >= 40 else 1
+    ws.write(logo_rows, t, title, band_title)
+    ws.write(logo_rows + 1, t, sub, band_sub)
+    ws.write(logo_rows + 2, t, f"Document {DOC_NO}  |  Version {VERSION}  |  As at {AS_AT}  |  Currency KES  |  UoM PCS", band_meta)
+    r = len(rows)
     ws.set_row(r, 6)
     for c in range(ncols):
         ws.write_blank(r, c, None, gold_rule)
@@ -375,7 +374,7 @@ notes = [
     ("Colour codes", "1 = jet black, 1B = off black, 2 = darkest brown, 30 / 33 = auburn tones, 99J = burgundy-plum, 613 = blonde, x/y = two-tone (ombre), BUR = burgundy, RW = red wine, PD = piano dark, BLK = black."),
     ("Controls", "Light-yellow cells are inputs; all other figures are formulas. The Summary carries a check that the product-line total equals the register total."),
     ("Goods received", "26 pieces were delivered on " + AS_AT + " (Goods Received sheet); they are part of the 41-piece opening count, not extra. The other 15 pieces were already on the shelf."),
-    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
+    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): logo moved to its own header block (no overlap). v2.1: Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
     ("Next step", "Match each SKU to its WooCommerce product and colour option and load these counts and buying prices as the NURA Desk stock-take."),
 ]
 for i, (l, t) in enumerate(notes):
