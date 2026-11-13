@@ -17,7 +17,7 @@ Website live versions at hand-over: theme 1.134.0, plugin `nura-experience` 1.10
 | Opening stock register XLSX | Done, **v4.1** (`data/`) - actual making costs + transport, total KES 85,375 |
 | Opening stock CSV + notes | Done, match v4.1 |
 | Stock lines -> website products mapping | Draft (`data/opening-stock-woocommerce-map.md`), 6 lines unmatched |
-| **NURA Desk Stock tab (code)** | **Built 14 Nov as plugin 1.110.0, PHP lint clean. In this repo under `nura-experience/` only - NOT yet in the website repo, NOT yet installed or tested on the live site.** |
+| **NURA Desk Stock tab (code)** | **Released: plugin 1.110.0 installed live and tested by the owner 14 Nov (website order, till sale, WhatsApp order all correct under Stock). Copied to moselanto/nurabeauty.co.ke main in 5f0e709.** From now on the website repo is the source of truth for plugin code; the copies under `nura-experience/` here are a snapshot of 1.110.0. |
 
 ## 3. Stock figures (source of truth: `data/opening-stock-2026-11-13.csv`)
 
@@ -90,7 +90,7 @@ Files in this repo (same paths as the website repo; base = website `main` at e58
 - `nura-experience/includes/class-nura-staff.php`: permission `stock` (default on for shop managers), label, log area `stock`, perms form group "Stock".
 - `nura-experience/nura-experience.php`: require + `new NURAX_Desk_Stock()`, version 1.110.0.
 
-Release still to do: copy these 4 files into moselanto/nurabeauty.co.ke, update its HANDOVER/PROJECT-STATUS/README, build the zip, owner installs. Test: website checkout, till sale + void, WhatsApp order (place, mark paid, cancel, convert at till), payment plan reserve/cancel, sourced sale, stock-take, move, CSV downloads. Note: existing open WhatsApp orders placed before 1.110.0 are NOT held retroactively.
+Released 14 Nov: owner installed 'nura-experience-1.110.0 costs v4.1', tested, and the 4 files went to the website repo (5f0e709) with HANDOVER/PROJECT-STATUS/README updated. Test: website checkout, till sale + void, WhatsApp order (place, mark paid, cancel, convert at till), payment plan reserve/cancel, sourced sale, stock-take, move, CSV downloads. Note: existing open WhatsApp orders placed before 1.110.0 are NOT held retroactively.
 
 ### Original Phase 1 shape (from PRD, with defaults)
 
@@ -124,4 +124,5 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 | 14 Nov 2026 | Ray | v4.0: actual making costs per product line, weighted average cost per piece; CSV, md, HANDOVER updated | 6c9ae35 |
 | 14 Nov 2026 | Ray | Stock tab built (plugin 1.110.0) in `nura-experience/`; not yet released | d9512bf |
 | 14 Nov 2026 | Ray | v4.1: KES 200 materials transport added (total 85,375); CSV, md, plugin buying prices updated | 1db12a1 |
-| 14 Nov 2026 | Ray | Owner confirmed extra costs stay averaged per line; costs closed | (this commit) |
+| 14 Nov 2026 | Ray | Owner confirmed extra costs stay averaged per line; costs closed | 552a95a |
+| 14 Nov 2026 | Ray | 1.110.0 installed and tested by owner; released to website repo 5f0e709 | (this commit) |
