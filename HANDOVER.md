@@ -114,7 +114,7 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 
 ## 6d. Owner rule: never out of stock by itself (14 Nov 2026)
 
-Stock held is samples to understand the trend; suppliers are on standby. Customers may order any quantity even when the shop holds 1-2. Plugin 1.111.0: tracked items keep selling at 0 (backorder shown as In stock), Available can go below 0 and the Stock list says 'Order from supplier'; only staff 'Stop selling' on the Stock tab shows Out of stock (reason required, logged). Setting 'Never show Out of stock by itself' (default on). Tested live with order #2371 (cancelled) and a qty-5 cart on Burgundy (2 in stock). Detail: website repo HANDOVER 14 Nov 01:40.
+Stock held is samples to understand the trend; suppliers are on standby. Customers may order any quantity even when the shop holds 1-2. Plugin 1.111.0: tracked items keep selling at 0 (backorder shown as In stock), Available can go below 0 and the Stock list says 'Order from supplier'; only staff 'Stop selling' on the Stock tab shows Out of stock (reason required, logged). Setting 'Never show Out of stock by itself' (default on). Tested live with order #2371 (cancelled) and a qty-5 cart on Burgundy (2 in stock). Detail: website repo HANDOVER 14 Nov 01:40. Plugin 1.111.1 (14 Nov 01:55): shoppers see no 'N in stock' text, only price and Add to bag; a stopped item is stored as Out of stock so wp-admin and the Products stock filter agree (tested on Negatron #2368, undone).
 
 ## 7. Waiting on the owner
 
@@ -147,4 +147,5 @@ Stock held is samples to understand the trend; suppliers are on standby. Custome
 | 14 Nov 2026 | Ray | Plugin 1.110.2 (cancel restores name the order; C199J buying price) installed and tested | 22230fc |
 | 14 Nov 2026 | Ray | Draft products for the 4 unmatched pieces (stock 26 on shelf); stock places stay Studio | 21b9fbb |
 | 14 Nov 2026 | Ray | Selling prices set; LWF 2/30 enabled; photos pending | 6e845e4 |
-| 14 Nov 2026 | Ray | Plugin 1.111.0: never out of stock by itself; Stop selling | (this commit) |
+| 14 Nov 2026 | Ray | Plugin 1.111.0: never out of stock by itself; Stop selling | f01db67 |
+| 14 Nov 2026 | Ray | Plugin 1.111.1: stock text hidden; stopped = Out of stock in admin and lookup | (this commit) |
