@@ -105,9 +105,15 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 
 Owner chose option 1: only the shelf pieces that match a website colour are tracked (variation-level Manage stock; all other products stay 'In stock' untracked). Loaded 22 of the 26: Loose Wave Frontal #364 Black 5 (colours 1 + 2), Burgundy 2, 33 4, Red Wine 2, 30 1; 4x4 Loose Wave Hair Closure #243 C199J 2 (= 99J), Black 2, C33 2; Bone Straight #274 Black 2. Not loaded: LWF 2/30 x1, Bob Amanda x2, 2x2 Negatron x1. Opening buying prices (v4.1) loaded on the matched colours; closure C199J set by hand (loader missed the label). Website test order #2361 reduced Burgundy 2->1 and was cancelled (restored to 2). Plugin now 1.110.1 (menu fix). Both gaps fixed in plugin 1.110.2 (installed and tested 14 Nov with test order #2363). Full detail: website repo HANDOVER.md session log 14 Nov 00:55.
 
+## 6c. All 26 shelf pieces live in the Stock tab (14 Nov 2026, 01:15)
+
+- Draft products, prices blank, stock tracked, v4.1 buying prices: Bob Amanda #2364 (Black var #2365 qty 1, 33 var #2366 qty 1, 1,839.90); 2x2 Negatron Closure #2367 (1/30 var #2368 qty 1, 700.00); Loose Wave Frontal #364 colour 2/30 var #2369 qty 1, 1,934.88, Enabled unticked (hidden). Stock tab: 13 lines, On shelf 26.
+- **Stock places decision (owner):** all stock is kept at the Studio; Stock places stays just 'Studio'. 'Not placed yet' on the Stock list means Studio (split is written only when stock changes).
+- Section 7 mapping items for these 4 lines are resolved (products created).
+
 ## 7. Waiting on the owner
 
-- 14 Nov 01:05 message had template blanks: stock place names, which items go where, and selling prices for Bob Amanda (2), 2x2 Negatron (1), LWF colour 2/30 (1). When given: set places in Desk settings, move pieces on the Stock tab; create the 3 website products/colour, track stock with those counts, buying prices Bob Amanda 1,839.90, Negatron 700.00, LWF 1,934.88 (v4.1).
+- Selling prices for Bob Amanda (Black, 33), 2x2 Negatron 1/30 and Loose Wave Frontal 2/30 (owner will send). Then: set prices, tick Enabled on variation #2369, publish drafts #2364 and #2367 when ready.
 
 
 
@@ -133,4 +139,5 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 | 14 Nov 2026 | Ray | Owner confirmed extra costs stay averaged per line; costs closed | 552a95a |
 | 14 Nov 2026 | Ray | 1.110.0 installed and tested by owner; released to website repo 5f0e709 | 0f80e9c |
 | 14 Nov 2026 | Ray | 1.110.1 menu fix; 22 pieces tracked live, buying prices loaded, test order #2361 | 9ef86b2 |
-| 14 Nov 2026 | Ray | Plugin 1.110.2 (cancel restores name the order; C199J buying price) installed and tested | (this commit) |
+| 14 Nov 2026 | Ray | Plugin 1.110.2 (cancel restores name the order; C199J buying price) installed and tested | 22230fc |
+| 14 Nov 2026 | Ray | Draft products for the 4 unmatched pieces (stock 26 on shelf); stock places stay Studio | (this commit) |
