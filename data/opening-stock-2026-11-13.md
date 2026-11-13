@@ -27,7 +27,7 @@ Source: owner's stock book and delivery list of 13 Nov 2026. Costs: actual cost 
 
 The KES 200 transport (wig maker collecting materials) is a shared cost of the main batch (owner's main-batch total KES 75,065). It is spread over the main-batch lines in proportion to their cost. Grand total KES 85,375 matches the owner's figure.
 
-Open: the owner has not yet said which single wig carries each of the colour 30 cost (3,210), the other Loose Wave Frontal (2,300) and the Bone Straight extra (3,100); until then they are averaged across their product line.
+Owner decision (14 Nov 2026): the colour 30 cost (3,210), the other Loose Wave Frontal (2,300) and the Bone Straight extra (3,100) are each the full making cost of a wig (bundles, ventilation, labour, wig cap) and stay averaged across their product line (weighted average cost). They are not assigned to single pieces.
 
 The 43 includes 1 over-delivered piece (Loose Wave Frontal colour 33: ordered 3, received 4).
 

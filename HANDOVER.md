@@ -31,7 +31,7 @@ Website live versions at hand-over: theme 1.134.0, plugin `nura-experience` 1.10
 - Stock book quantities = what was ordered from the vendor. Ordered total 42; Loose Wave Frontal colour 33 was ordered 3 and received 4 (1 over-delivered), so the book total is 43.
 - Awaiting vendor (17): Body Wave 6 (Piano Dark 2, 613 2, Black 2); Bone Straight High Fibre 4 (613 2, Piano Dark 2); Loose Wave Frontal 2 (Burgundy 1, colour 30 1); Bob Amanda 2 (99J 1, 30 1); Empress 2 (1B 1, 1/33 1); Wonderful Frontal 1 (Black).
 - Delivery list wording: the 4x4 closure "burgundy x 2" = the stock book's "99J x 2" (treated as the same 2 pieces).
-- Costs (owner, 13-14 Nov; replace the earlier per-piece buying prices): every wig is made from scratch (bundles, ventilation, wig cap, labour). The KES 200 that was missing from the line amounts is transport for the wig maker to collect materials. It is a shared main-batch cost, spread over the main-batch lines in proportion to cost. Line totals: Loose Wave Frontal 32,892.96; Loose Wave 4x4 Closure 9,640.69; Bone Straight High Fibre 14,931.52; Body Wave 14,739.27; Bob Amanda 7,359.61; Empress 4,110.95; Wonderful Frontal (new trial) 1,000.00; 2x2 Negatron Closure (new trial) 700.00 = KES 85,375.00. Unit cost = weighted average per piece (line total / pieces in stock book): Loose Wave Frontal 1,934.88; Loose Wave 4x4 Closure 1,606.78; Bone Straight High Fibre 2,488.59; Body Wave 2,456.55; Bob Amanda 1,839.90; Empress 2,055.47; Wonderful Frontal 1,000.00; 2x2 Negatron Closure 700.00. These are the plugin's opening buying prices (`_nura_cost`).
+- Costs (owner, 13-14 Nov; replace the earlier per-piece buying prices): every wig is made from scratch (bundles, ventilation, wig cap, labour). The KES 200 that was missing from the line amounts is transport for the wig maker to collect materials. It is a shared main-batch cost, spread over the main-batch lines in proportion to cost. Line totals: Loose Wave Frontal 32,892.96; Loose Wave 4x4 Closure 9,640.69; Bone Straight High Fibre 14,931.52; Body Wave 14,739.27; Bob Amanda 7,359.61; Empress 4,110.95; Wonderful Frontal (new trial) 1,000.00; 2x2 Negatron Closure (new trial) 700.00 = KES 85,375.00. Unit cost = weighted average per piece (line total / pieces in stock book): Loose Wave Frontal 1,934.88; Loose Wave 4x4 Closure 1,606.78; Bone Straight High Fibre 2,488.59; Body Wave 2,456.55; Bob Amanda 1,839.90; Empress 2,055.47; Wonderful Frontal 1,000.00; 2x2 Negatron Closure 700.00. These are the plugin's opening buying prices (`_nura_cost`). Owner decision 14 Nov: the extra 3,210 (LWF colour 30), 2,300 (another LWF) and 3,100 (Bone Straight) are full wig making costs and stay averaged across their line - do not assign them to single pieces.
 - SKU format: `NURA-<line>-<colour>` (e.g. `NURA-LWF-33`); `/` in a colour code becomes `-`.
 
 ## 4. Files in this repo
@@ -103,7 +103,6 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 
 ## 7. Waiting on the owner
 
-- 14 Nov message left blanks: which Loose Wave Frontal gets the colour-30 cost (3,210), which piece gets the other LWF 2,300, which Bone Straight colour gets the 3,100. Until answered they are averaged across their line. (The extra KES 200 is answered: materials transport, in v4.1.)
 
 
 - Names of stock locations (he will enter them in Settings) and which items are where.
@@ -124,4 +123,5 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 | 13 Nov 2026 | Ray | HANDOVER.md for the next agent; README/PRD refreshed | 594afa3 |
 | 14 Nov 2026 | Ray | v4.0: actual making costs per product line, weighted average cost per piece; CSV, md, HANDOVER updated | 6c9ae35 |
 | 14 Nov 2026 | Ray | Stock tab built (plugin 1.110.0) in `nura-experience/`; not yet released | d9512bf |
-| 14 Nov 2026 | Ray | v4.1: KES 200 materials transport added (total 85,375); CSV, md, plugin buying prices updated | (this commit) |
+| 14 Nov 2026 | Ray | v4.1: KES 200 materials transport added (total 85,375); CSV, md, plugin buying prices updated | 1db12a1 |
+| 14 Nov 2026 | Ray | Owner confirmed extra costs stay averaged per line; costs closed | (this commit) |
