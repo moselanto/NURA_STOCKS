@@ -1,6 +1,6 @@
 # NURA Stocks - plan (PRD)
 
-Draft for owner approval, 13 Nov 2026. Nothing here is built yet.
+Approved with owner decisions, 13 Nov 2026 ("use defaults, start building"). Code not started yet - see HANDOVER.md.
 
 ## Goal
 
@@ -39,14 +39,14 @@ A new NURA Desk module in the `nura-experience` plugin (website repo), file `inc
 
 ## Owner decisions (13 Nov 2026)
 
-1. **Manage stock is already on** in WooCommerce and the owner says the counts there are correct. Phase 1 reads them as they are; the opening stock register (`data/`) is loaded only for lines that match a website product and colour.
-2. **More than one location.** Some stock is kept away from the studio. Phase 1 adds locations: the WooCommerce count stays the total, and NURA Stocks splits it by location (table `nurax_stock_locations` + per-location quantities), with a "Move stock" action between locations (logged, total unchanged). Location names still needed from the owner.
-3. **WhatsApp orders reduce stock.** Proposed: a WhatsApp order reserves the piece when it is placed and takes it off the shelf when it is paid; a cancelled or expired order releases the reservation.
+1. **Manage stock is already on** in WooCommerce and the owner says the counts there are correct. Phase 1 reads them as they are. Opening register: 26 pieces on the shelf (only the 13 Nov delivery); loaded only for lines that match a website product and colour.
+2. **More than one location.** Some stock is kept away from the studio. Phase 1 adds locations: the WooCommerce count stays the total, and NURA Stocks splits it by location (table `nurax_stock_locations` + per-location quantities), with a "Move stock" action between locations (logged, total unchanged). The owner names the locations himself in NURA Desk Settings.
+3. **WhatsApp orders reduce stock** (accepted by owner): a WhatsApp order reserves the piece when it is placed and takes it off the shelf when it is paid; a cancelled or expired order releases the reservation.
 4. **Shop managers can change stock** (adjust, receive, stock-take, move) as well as the owner. Every change needs a reason and is written to the activity log.
 5. **Care products are counted** the same way as wigs.
 6. **Payment-plan reservations show as "Reserved"** in their own column: On shelf - Reserved = Available to sell.
 
 ## Still needed from the owner
 
-- Names of the stock locations, and which opening-stock lines are kept where.
-- Decisions on the website mapping (`data/opening-stock-woocommerce-map.md`): Black colour 1 vs colour 2 on Loose Wave Frontal, 99J/burgundy on the 4x4 closure, Piano vs Piano Dark on Body Wave, colour 2/30, and new products for Bob Amanda, Empress, Wonderful Frontal and 2x2 Negatron.
+- Which items are kept at which location (owner enters location names in Settings).
+- Decisions on the website mapping (`data/opening-stock-woocommerce-map.md`): Black colour 1 vs colour 2 on Loose Wave Frontal, 99J/burgundy on the 4x4 closure, Piano vs Piano Dark on Body Wave, colour 2/30, and new products for Bob Amanda, Empress, Wonderful Frontal and 2x2 Negatron. Until decided, these 6 lines stay unloaded (owner, 13 Nov).

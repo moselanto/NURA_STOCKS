@@ -2,7 +2,9 @@
 
 Stock control for **NURA Beauty** (https://nurabeauty.co.ke): live stock counts for every product and every colour/length option, built as a **Stock** tab inside NURA Desk (the back office in the `nura-experience` plugin).
 
-Status: **planning** (13 Nov 2026). No code yet. The plan is in [PRD.md](PRD.md) and waits for the owner's approval.
+Status (13 Nov 2026): plan approved with owner decisions; opening stock counted and valued (26 pcs on shelf, KES 53,400; 17 awaiting vendor; 43 in stock book). **Stock tab code not started yet.**
+
+**Next agent: start with [HANDOVER.md](HANDOVER.md).**
 
 ## Related repository
 
@@ -30,3 +32,7 @@ Read its `PROJECT-STATUS.md`, `AGENTS.md` and `HANDOVER.md` before changing anyt
 - `README.md` - this file
 - `PRD.md` - what we are building, phase by phase, plus open questions for the owner
 - `AGENTS.md` - rules for developers and AI agents working here
+- `HANDOVER.md` - current status, figures, decisions, build notes and session log (read first)
+- `data/` - opening stock register (XLSX v3.1), CSV, notes, WooCommerce mapping draft
+- `scripts/build_opening_stock_register.py` - rebuilds the register
+- `assets/` - NURA logo
