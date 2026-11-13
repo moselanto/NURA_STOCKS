@@ -37,11 +37,16 @@ A new NURA Desk module in the `nura-experience` plugin (website repo), file `inc
 - Supplier purchase records with quantities.
 - Suggestions from Sourced sales ("worth stocking").
 
-## Open questions for the owner
+## Owner decisions (13 Nov 2026)
 
-1. Does the shop already turn on stock tracking ("Manage stock") for products in WooCommerce, and are the numbers there correct today? If not, Phase 1 starts with a full stock-take.
-2. Is all stock kept in one place (the studio, Stanbank House) or also somewhere else?
-3. Do WhatsApp orders become WooCommerce orders that should reduce stock, or are they only recorded when paid?
-4. Who may adjust stock: only the owner, or shop managers too?
-5. Care products: count them the same way as wigs (yes/no)?
-6. Should a payment-plan reservation stay counted as "reserved" (shown separately) rather than simply removed from the shelf count?
+1. **Manage stock is already on** in WooCommerce and the owner says the counts there are correct. Phase 1 reads them as they are; the opening stock register (`data/`) is loaded only for lines that match a website product and colour.
+2. **More than one location.** Some stock is kept away from the studio. Phase 1 adds locations: the WooCommerce count stays the total, and NURA Stocks splits it by location (table `nurax_stock_locations` + per-location quantities), with a "Move stock" action between locations (logged, total unchanged). Location names still needed from the owner.
+3. **WhatsApp orders reduce stock.** Proposed: a WhatsApp order reserves the piece when it is placed and takes it off the shelf when it is paid; a cancelled or expired order releases the reservation.
+4. **Shop managers can change stock** (adjust, receive, stock-take, move) as well as the owner. Every change needs a reason and is written to the activity log.
+5. **Care products are counted** the same way as wigs.
+6. **Payment-plan reservations show as "Reserved"** in their own column: On shelf - Reserved = Available to sell.
+
+## Still needed from the owner
+
+- Names of the stock locations, and which opening-stock lines are kept where.
+- Decisions on the website mapping (`data/opening-stock-woocommerce-map.md`): Black colour 1 vs colour 2 on Loose Wave Frontal, 99J/burgundy on the 4x4 closure, Piano vs Piano Dark on Body Wave, colour 2/30, and new products for Bob Amanda, Empress, Wonderful Frontal and 2x2 Negatron.

@@ -14,7 +14,7 @@ LOGO = os.path.join(ROOT, "assets", "NURA_Beauty_Compact_Logo_Flat_Full_Colour_3
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "data", "NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx")
 TMP = os.path.join(ROOT, "assets")
 
-DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "2.0", "2026-11-13"
+DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "2.1", "2026-11-13"
 
 # product line code -> (product name, unit cost KES)
 LINES = {
@@ -54,6 +54,24 @@ ITEMS = [
     ("WF", "Black", "BLK", 1, 1, "New trial line."),
     ("NEG22", "Colour 1/30", "1-30", 1, 1, "New trial line."),
 ]
+
+DELIVERY = [
+    ("LW44", "1", 2, "4x4 closure wig, colour one"),
+    ("LW44", "33", 2, "4x4 closure wig, colour 33"),
+    ("LW44", "99J", 2, "4x4 closure wig, burgundy (99J in stock book)"),
+    ("LWF", "RW", 2, "Red wine frontal"),
+    ("LWF", "2-30", 1, "Colour 2/30 frontal"),
+    ("BSHF", "BLK", 2, "Bone straight, black"),
+    ("LWF", "30", 1, "Loose wave, colour 30"),
+    ("LWF", "33", 4, "Loose wave frontal, colour 33"),
+    ("LWF", "BUR", 2, "Loose wave frontal, burgundy"),
+    ("LWF", "2", 3, "Loose wave frontal, colour two"),
+    ("LWF", "1", 2, "Loose wave frontal, colour one"),
+    ("BOBA", "BLK", 1, "Bob, black"),
+    ("BOBA", "33", 1, "Bob, colour 33"),
+    ("NEG22", "1-30", 1, "Negatron 2x2"),
+]
+DELIVERED = {(lc, cc): q for lc, cc, q, _ in DELIVERY}
 
 GOLD, BLACK, INK, CREAM, ZEBRA, LINE, MUTED = "#C9972C", "#0E0E0E", "#1F1F1F", "#FBF6EA", "#FAFAFA", "#D9D9D9", "#6B6B6B"
 FONT = "Calibri"
@@ -143,6 +161,8 @@ for i, (lc, col, cc, o, r, rem) in enumerate(ITEMS):
     name, cost = LINES[lc]
     pend, over = max(o - r, 0), max(r - o, 0)
     status = "Part-received" if pend else ("Over-delivered" if over else "Received in full")
+    if (lc, cc) not in DELIVERED:
+        rem = (rem + " " if rem else "") + "Shelf stock held before the 2026-11-13 delivery."
     rows.append(dict(n=i + 1, sku=f"NURA-{lc}-{cc}", lc=lc, name=name, col=col, cc=cc, o=o, r=r, pend=pend,
                      over=over, oh=r, cost=cost, val=r * cost, status=status, rem=rem))
 T = {k: sum(x[k] for x in rows) for k in ("o", "r", "pend", "over", "oh", "val")}
@@ -292,6 +312,51 @@ for j, (k, x) in enumerate(var):
 v.write(vr + 2 + len(var), 1, "Variance = received minus ordered. Negative = still due from supplier (not in stock); positive = over-delivered (in stock).", note)
 setup_print(v, True, (vr, vr))
 
+
+# =====================================================================  GOODS RECEIVED
+g = wb.add_worksheet("Goods Received")
+gcol = [3, 6, 17, 27, 18, 34, 9, 9, 10, 12, 14]
+for i, w in enumerate(gcol):
+    g.set_column(i, i, w)
+gr = header_band(g, len(gcol), "GOODS RECEIVED NOTE", "Supplier delivery received at the studio on " + AS_AT + " (owner's list)", 64, [18, 24, 18, 18], [px(w) for w in gcol])
+gh = ["No.", "Item code (SKU)", "Product", "Colour", "As written on delivery list", "Qty ordered", "Qty received", "Variance (pcs)", "Unit cost (KES)", "Value received (KES)"]
+g.set_row(gr, 30)
+for i, h in enumerate(gh):
+    g.write(gr, 1 + i, h, hdr)
+idx = {(x["lc"], x["cc"]): k for k, x in enumerate(rows)}
+gv = 0
+for j, (lc, cc, q, said) in enumerate(DELIVERY):
+    k = idx[(lc, cc)]; x = rows[k]; rr = gr + 1 + j; e = rr + 1; src = R0 + k + 1; z = j % 2
+    g.write_number(rr, 1, j + 1, cell(z, align="center"))
+    g.write_formula(rr, 2, f"={REG}B{src}", cell(z), x["sku"])
+    g.write_formula(rr, 3, f"={REG}C{src}", cell(z), x["name"])
+    g.write_formula(rr, 4, f"={REG}D{src}", cell(z), x["col"])
+    g.write(rr, 5, said, cell(z, font_size=9, italic=True))
+    g.write_formula(rr, 6, f"={REG}F{src}", cell(z, align="center"), x["o"])
+    g.write_number(rr, 7, q, cell(False, bg_color="#FFF6D6", align="center", num_format="#,##0"))
+    g.write_formula(rr, 8, f"=H{e}-G{e}", cell(z, align="center", num_format="+#,##0;-#,##0;0"), q - x["o"])
+    g.write_formula(rr, 9, f"={REG}L{src}", cell(z, align="right", num_format="#,##0.00"), x["cost"])
+    g.write_formula(rr, 10, f"=H{e}*J{e}", cell(z, align="right", num_format="#,##0.00"), q * x["cost"])
+    gv += q * x["cost"]
+gl = gr + 1 + len(DELIVERY); ga, gb = gr + 2, gl
+g.set_row(gl, 22)
+for c in range(1, 11):
+    g.write_blank(gl, c, None, tot_l)
+g.write(gl, 3, "TOTAL RECEIVED", tot_l)
+g.write_formula(gl, 6, f"=SUM(G{ga}:G{gb})", tot, sum(rows[idx[(a, b)]]["o"] for a, b, _, _ in DELIVERY))
+g.write_formula(gl, 7, f"=SUM(H{ga}:H{gb})", tot, sum(q for _, _, q, _ in DELIVERY))
+g.write_formula(gl, 10, f"=SUM(K{ga}:K{gb})", tot_m, gv)
+g.write(gl + 2, 1, "Reconciliation to opening stock", lab)
+recon = [("Received in this delivery (pcs)", f"=H{gl+1}", sum(q for _, _, q, _ in DELIVERY)),
+         ("Shelf stock held before the delivery (pcs)", f"={REG}J{TR+1}-H{gl+1}", T["oh"] - sum(q for _, _, q, _ in DELIVERY)),
+         ("Opening stock on hand (pcs)", f"={REG}J{TR+1}", T["oh"])]
+for i, (l, fx, val) in enumerate(recon):
+    g.write(gl + 3 + i, 2, l, f(bold=(i == 2)))
+    g.write_formula(gl + 3 + i, 7, fx, f(bold=(i == 2), align="center", num_format="#,##0", top=(2 if i == 2 else 0), top_color=GOLD), val)
+g.write(gl + 7, 1, "The delivery is already included in the opening stock count; it is not added again. Variance = received minus ordered.", note)
+g.write(gl + 9, 1, "Received by: ______________________", txt); g.write(gl + 9, 5, "Checked by: ______________________", txt); g.write(gl + 9, 9, "Date: ____________", txt)
+setup_print(g, True, (gr, gr))
+
 # =====================================================================  NOTES
 nt = wb.add_worksheet("Notes")
 nt.set_column(0, 0, 3); nt.set_column(1, 1, 28); nt.set_column(2, 2, 100)
@@ -309,7 +374,8 @@ notes = [
     ("Item codes (SKU)", "NURA-<product line>-<colour code>, e.g. NURA-LWF-33 = Loose Wave Frontal, colour 33. A slash in a colour code is written as a hyphen (1/33 = 1-33)."),
     ("Colour codes", "1 = jet black, 1B = off black, 2 = darkest brown, 30 / 33 = auburn tones, 99J = burgundy-plum, 613 = blonde, x/y = two-tone (ombre), BUR = burgundy, RW = red wine, PD = piano dark, BLK = black."),
     ("Controls", "Light-yellow cells are inputs; all other figures are formulas. The Summary carries a check that the product-line total equals the register total."),
-    ("Document control", DOC_NO + ", version " + VERSION + " (" + AS_AT + "): unit costs and valuation added. Version 1.0: quantities only."),
+    ("Goods received", "26 pieces were delivered on " + AS_AT + " (Goods Received sheet); they are part of the 41-piece opening count, not extra. The other 15 pieces were already on the shelf."),
+    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
     ("Next step", "Match each SKU to its WooCommerce product and colour option and load these counts and buying prices as the NURA Desk stock-take."),
 ]
 for i, (l, t) in enumerate(notes):
@@ -319,9 +385,9 @@ for i, (l, t) in enumerate(notes):
     nt.write(rr, 2, t, f(text_wrap=True, valign="top", bottom=1, bottom_color=LINE))
 setup_print(nt, True)
 
-for ws, c in ((s, GOLD), (reg, BLACK), (v, GOLD), (nt, MUTED)):
+for ws, c in ((s, GOLD), (reg, BLACK), (v, GOLD), (g, BLACK), (nt, MUTED)):
     ws.set_tab_color(c)
-wb.worksheets_objs.sort(key=lambda w: ["Summary", "Stock Register", "Supplier Variances", "Notes"].index(w.name))
+wb.worksheets_objs.sort(key=lambda w: ["Summary", "Stock Register", "Goods Received", "Supplier Variances", "Notes"].index(w.name))
 s.activate(); s.set_first_sheet()
 wb.close()
 for fn in os.listdir(TMP):
