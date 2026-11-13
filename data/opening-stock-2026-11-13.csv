@@ -1,25 +1,25 @@
-product,colour,pieces,unit_cost_kes,stock_value_kes,status,note
-Loose Wave Frontal,Black C2 (colour 2),3,2300,6900,resolved,
-Loose Wave Frontal,Black C1 (colour 1),2,2300,4600,resolved,
-Loose Wave Frontal,Burgundy,2,2300,4600,resolved,"Ordered 3, received 2; 1 pending from supplier"
-Loose Wave Frontal,C33 (colour 33),4,2300,9200,resolved,"Ordered 3, received 4; 1 over-delivered"
-Loose Wave Frontal,Redwine,2,2300,4600,resolved,
-Loose Wave Frontal,2/30,1,2300,2300,resolved,
-Loose Wave Frontal,C30 (colour 30),1,2300,2300,resolved,"Ordered 2, received 1; 1 pending from supplier"
-Loose Wave 4x4,99J,2,1700,3400,resolved,"8 crossed out, 2 written"
-Loose Wave 4x4,C1 Black,2,1700,3400,resolved,
-Loose Wave 4x4,C33 (colour 33),2,1700,3400,resolved,
-Bone Straight High Fibre,613,2,2550,5100,resolved,
-Bone Straight High Fibre,Piano dark,2,2550,5100,resolved,
-Bone Straight High Fibre,Black,2,2550,5100,resolved,
-Bodywave,Piano dark,2,2450,4900,resolved,
-Bodywave,613,2,2450,4900,resolved,
-Bodywave,Black,2,2450,4900,resolved,
-Bob Amanda,Black,1,1300,1300,resolved,
-Bob Amanda,99J,1,1300,1300,resolved,
-Bob Amanda,33,1,1300,1300,resolved,
-Bob Amanda,30,1,1300,1300,resolved,
-Empress,C1B (colour 1B),1,2000,2000,resolved,Colour 1B confirmed by owner
-Empress,C1/33 (colour 1/33),1,2000,2000,resolved,
-New Trials - Wonderful Frontal,Black,1,1750,1750,resolved,
-New Trials - 2x2 Negatron,Colour 1/30,1,1000,1000,resolved,"Colour 1/30, 1 piece confirmed by owner"
+sku,product,colour,qty_ordered,qty_received_on_shelf,qty_awaiting_vendor,qty_over_delivered,unit_cost_kes,value_on_shelf_kes,value_awaiting_kes,status,note
+NURA-LWF-2,Loose Wave Frontal,Black (colour 2),3,3,0,0,2300,6900,0,Received in full,
+NURA-LWF-1,Loose Wave Frontal,Black (colour 1),2,2,0,0,2300,4600,0,Received in full,
+NURA-LWF-BUR,Loose Wave Frontal,Burgundy,3,2,1,0,2300,4600,2300,Part-received,"Ordered 3, received 2; balance of 1 due from supplier."
+NURA-LWF-33,Loose Wave Frontal,Colour 33,3,4,0,1,2300,9200,0,Over-delivered,"Ordered 3, received 4; 1 piece over-delivered."
+NURA-LWF-RW,Loose Wave Frontal,Red Wine,2,2,0,0,2300,4600,0,Received in full,
+NURA-LWF-2-30,Loose Wave Frontal,Colour 2/30,1,1,0,0,2300,2300,0,Received in full,
+NURA-LWF-30,Loose Wave Frontal,Colour 30,2,1,1,0,2300,2300,2300,Part-received,"Ordered 2, received 1; balance of 1 due from supplier."
+NURA-LW44-99J,Loose Wave 4x4 Closure,Colour 99J,2,2,0,0,1700,3400,0,Received in full,
+NURA-LW44-1,Loose Wave 4x4 Closure,Black (colour 1),2,2,0,0,1700,3400,0,Received in full,
+NURA-LW44-33,Loose Wave 4x4 Closure,Colour 33,2,2,0,0,1700,3400,0,Received in full,
+NURA-BSHF-613,Bone Straight High Fibre,Colour 613 (blonde),2,0,2,0,2550,0,5100,Awaiting delivery,Not yet received from supplier.
+NURA-BSHF-PD,Bone Straight High Fibre,Piano Dark,2,0,2,0,2550,0,5100,Awaiting delivery,Not yet received from supplier.
+NURA-BSHF-BLK,Bone Straight High Fibre,Black,2,2,0,0,2550,5100,0,Received in full,
+NURA-BW-PD,Body Wave,Piano Dark,2,0,2,0,2450,0,4900,Awaiting delivery,Not yet received from supplier.
+NURA-BW-613,Body Wave,Colour 613 (blonde),2,0,2,0,2450,0,4900,Awaiting delivery,Not yet received from supplier.
+NURA-BW-BLK,Body Wave,Black,2,0,2,0,2450,0,4900,Awaiting delivery,Not yet received from supplier.
+NURA-BOBA-BLK,Bob Amanda,Black,1,1,0,0,1300,1300,0,Received in full,
+NURA-BOBA-99J,Bob Amanda,Colour 99J,1,0,1,0,1300,0,1300,Awaiting delivery,Not yet received from supplier.
+NURA-BOBA-33,Bob Amanda,Colour 33,1,1,0,0,1300,1300,0,Received in full,
+NURA-BOBA-30,Bob Amanda,Colour 30,1,0,1,0,1300,0,1300,Awaiting delivery,Not yet received from supplier.
+NURA-EMP-1B,Empress,Colour 1B,1,0,1,0,2000,0,2000,Awaiting delivery,Not yet received from supplier.
+NURA-EMP-1-33,Empress,Colour 1/33,1,0,1,0,2000,0,2000,Awaiting delivery,Not yet received from supplier.
+NURA-WF-BLK,Wonderful Frontal (new trial),Black,1,0,1,0,1750,0,1750,Awaiting delivery,Not yet received from supplier.
+NURA-NEG22-1-30,2x2 Negatron Closure (new trial),Colour 1/30,1,1,0,0,1000,1000,0,Received in full,New trial line.

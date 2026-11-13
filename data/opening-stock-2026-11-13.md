@@ -1,36 +1,42 @@
-# Opening stock - 13 Nov 2026
+# Opening stock - 13 Nov 2026 (register v3.0)
 
-Physical count from the owner's stock book, all lines confirmed by the owner. Unit costs (KES per piece) from the owner, 13 Nov 2026.
+Source: owner's stock book and the owner's delivery list of 13 Nov 2026. Unit costs from the owner. Only the pieces delivered on 13 Nov are on the shelf.
 
-- Formatted register: `NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx` (rebuild with `python scripts/build_opening_stock_register.py`)
+- Formatted register: `NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx` (v3.0; rebuild with `python scripts/build_opening_stock_register.py`)
 - Machine-readable: `opening-stock-2026-11-13.csv`
 
-**41 pieces on hand, stock value KES 86,650.00.** Pending from supplier: 2 pieces (KES 4,600.00 at cost, not included). Over-delivered: 1 piece (Loose Wave Frontal colour 33, included).
+| | Pieces | Value at cost (KES) |
+|---|---|---|
+| On the shelf (received 13 Nov) | **26** | **53,400.00** |
+| Awaiting the vendor | **17** | 37,850.00 |
+| Total in the stock book | **43** | 91,250.00 |
 
-| Product | Colour | Pieces | Unit cost (KES) | Value (KES) | Note |
-|---|---|---|---|---|---|
-| Loose Wave Frontal | Black C2 (colour 2) | 3 | 2,300 | 6,900 |  |
-| Loose Wave Frontal | Black C1 (colour 1) | 2 | 2,300 | 4,600 |  |
-| Loose Wave Frontal | Burgundy | 2 | 2,300 | 4,600 | Ordered 3, received 2; 1 pending from supplier |
-| Loose Wave Frontal | C33 (colour 33) | 4 | 2,300 | 9,200 | Ordered 3, received 4; 1 over-delivered |
-| Loose Wave Frontal | Redwine | 2 | 2,300 | 4,600 |  |
-| Loose Wave Frontal | 2/30 | 1 | 2,300 | 2,300 |  |
-| Loose Wave Frontal | C30 (colour 30) | 1 | 2,300 | 2,300 | Ordered 2, received 1; 1 pending from supplier |
-| Loose Wave 4x4 | 99J | 2 | 1,700 | 3,400 | 8 crossed out, 2 written |
-| Loose Wave 4x4 | C1 Black | 2 | 1,700 | 3,400 |  |
-| Loose Wave 4x4 | C33 (colour 33) | 2 | 1,700 | 3,400 |  |
-| Bone Straight High Fibre | 613 | 2 | 2,550 | 5,100 |  |
-| Bone Straight High Fibre | Piano dark | 2 | 2,550 | 5,100 |  |
-| Bone Straight High Fibre | Black | 2 | 2,550 | 5,100 |  |
-| Bodywave | Piano dark | 2 | 2,450 | 4,900 |  |
-| Bodywave | 613 | 2 | 2,450 | 4,900 |  |
-| Bodywave | Black | 2 | 2,450 | 4,900 |  |
-| Bob Amanda | Black | 1 | 1,300 | 1,300 |  |
-| Bob Amanda | 99J | 1 | 1,300 | 1,300 |  |
-| Bob Amanda | 33 | 1 | 1,300 | 1,300 |  |
-| Bob Amanda | 30 | 1 | 1,300 | 1,300 |  |
-| Empress | C1B (colour 1B) | 1 | 2,000 | 2,000 | Colour 1B confirmed by owner |
-| Empress | C1/33 (colour 1/33) | 1 | 2,000 | 2,000 |  |
-| New Trials - Wonderful Frontal | Black | 1 | 1,750 | 1,750 |  |
-| New Trials - 2x2 Negatron | Colour 1/30 | 1 | 1,000 | 1,000 | Colour 1/30, 1 piece confirmed by owner |
-| **Total** | | **41** | | **86,650** | |
+The 43 includes 1 over-delivered piece (Loose Wave Frontal colour 33: ordered 3, received 4). Pieces awaiting the vendor are not stock and are not in the stock value (IAS 2).
+
+| SKU | Product | Colour | Ordered | On shelf | Awaiting vendor | Unit cost (KES) | Value on shelf (KES) | Status |
+|---|---|---|---|---|---|---|---|---|
+| NURA-LWF-2 | Loose Wave Frontal | Black (colour 2) | 3 | 3 | 0 | 2,300 | 6,900 | Received in full |
+| NURA-LWF-1 | Loose Wave Frontal | Black (colour 1) | 2 | 2 | 0 | 2,300 | 4,600 | Received in full |
+| NURA-LWF-BUR | Loose Wave Frontal | Burgundy | 3 | 2 | 1 | 2,300 | 4,600 | Part-received |
+| NURA-LWF-33 | Loose Wave Frontal | Colour 33 | 3 | 4 | 0 | 2,300 | 9,200 | Over-delivered |
+| NURA-LWF-RW | Loose Wave Frontal | Red Wine | 2 | 2 | 0 | 2,300 | 4,600 | Received in full |
+| NURA-LWF-2-30 | Loose Wave Frontal | Colour 2/30 | 1 | 1 | 0 | 2,300 | 2,300 | Received in full |
+| NURA-LWF-30 | Loose Wave Frontal | Colour 30 | 2 | 1 | 1 | 2,300 | 2,300 | Part-received |
+| NURA-LW44-99J | Loose Wave 4x4 Closure | Colour 99J | 2 | 2 | 0 | 1,700 | 3,400 | Received in full |
+| NURA-LW44-1 | Loose Wave 4x4 Closure | Black (colour 1) | 2 | 2 | 0 | 1,700 | 3,400 | Received in full |
+| NURA-LW44-33 | Loose Wave 4x4 Closure | Colour 33 | 2 | 2 | 0 | 1,700 | 3,400 | Received in full |
+| NURA-BSHF-613 | Bone Straight High Fibre | Colour 613 (blonde) | 2 | 0 | 2 | 2,550 | 0 | Awaiting delivery |
+| NURA-BSHF-PD | Bone Straight High Fibre | Piano Dark | 2 | 0 | 2 | 2,550 | 0 | Awaiting delivery |
+| NURA-BSHF-BLK | Bone Straight High Fibre | Black | 2 | 2 | 0 | 2,550 | 5,100 | Received in full |
+| NURA-BW-PD | Body Wave | Piano Dark | 2 | 0 | 2 | 2,450 | 0 | Awaiting delivery |
+| NURA-BW-613 | Body Wave | Colour 613 (blonde) | 2 | 0 | 2 | 2,450 | 0 | Awaiting delivery |
+| NURA-BW-BLK | Body Wave | Black | 2 | 0 | 2 | 2,450 | 0 | Awaiting delivery |
+| NURA-BOBA-BLK | Bob Amanda | Black | 1 | 1 | 0 | 1,300 | 1,300 | Received in full |
+| NURA-BOBA-99J | Bob Amanda | Colour 99J | 1 | 0 | 1 | 1,300 | 0 | Awaiting delivery |
+| NURA-BOBA-33 | Bob Amanda | Colour 33 | 1 | 1 | 0 | 1,300 | 1,300 | Received in full |
+| NURA-BOBA-30 | Bob Amanda | Colour 30 | 1 | 0 | 1 | 1,300 | 0 | Awaiting delivery |
+| NURA-EMP-1B | Empress | Colour 1B | 1 | 0 | 1 | 2,000 | 0 | Awaiting delivery |
+| NURA-EMP-1-33 | Empress | Colour 1/33 | 1 | 0 | 1 | 2,000 | 0 | Awaiting delivery |
+| NURA-WF-BLK | Wonderful Frontal (new trial) | Black | 1 | 0 | 1 | 1,750 | 0 | Awaiting delivery |
+| NURA-NEG22-1-30 | 2x2 Negatron Closure (new trial) | Colour 1/30 | 1 | 1 | 0 | 1,000 | 1,000 | Received in full |
+| **Total** | | | **42** | **26** | **17** | | **53,400** | |
