@@ -101,6 +101,10 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 - WhatsApp: on `nurax_wa_order_saved` reserve (decrease WC stock, row `active`); on paid -> `sold`; on `cancelled` -> restore stock, `released`; on `_nwo_wc_order` added -> release first (WC order deducts). Only for products that manage stock; never block an order.
 - Release: bump plugin to 1.110.0, update website `HANDOVER.md`, `PROJECT-STATUS.md`, README; build zip; owner installs. Test checkout, till sale + void, WhatsApp order, payment plan reserve/cancel, sourced sale (AGENTS.md rule 2).
 
+## 6b. Live stock setup (14 Nov 2026)
+
+Owner chose option 1: only the shelf pieces that match a website colour are tracked (variation-level Manage stock; all other products stay 'In stock' untracked). Loaded 22 of the 26: Loose Wave Frontal #364 Black 5 (colours 1 + 2), Burgundy 2, 33 4, Red Wine 2, 30 1; 4x4 Loose Wave Hair Closure #243 C199J 2 (= 99J), Black 2, C33 2; Bone Straight #274 Black 2. Not loaded: LWF 2/30 x1, Bob Amanda x2, 2x2 Negatron x1. Opening buying prices (v4.1) loaded on the matched colours; closure C199J set by hand (loader missed the label). Website test order #2361 reduced Burgundy 2->1 and was cancelled (restored to 2). Plugin now 1.110.1 (menu fix). Known gaps for the next release: cancel restores logged without the order ref; add 'c199j' to the loader. Full detail: website repo HANDOVER.md session log 14 Nov 00:55.
+
 ## 7. Waiting on the owner
 
 
@@ -125,4 +129,5 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 | 14 Nov 2026 | Ray | Stock tab built (plugin 1.110.0) in `nura-experience/`; not yet released | d9512bf |
 | 14 Nov 2026 | Ray | v4.1: KES 200 materials transport added (total 85,375); CSV, md, plugin buying prices updated | 1db12a1 |
 | 14 Nov 2026 | Ray | Owner confirmed extra costs stay averaged per line; costs closed | 552a95a |
-| 14 Nov 2026 | Ray | 1.110.0 installed and tested by owner; released to website repo 5f0e709 | (this commit) |
+| 14 Nov 2026 | Ray | 1.110.0 installed and tested by owner; released to website repo 5f0e709 | 0f80e9c |
+| 14 Nov 2026 | Ray | 1.110.1 menu fix; 22 pieces tracked live, buying prices loaded, test order #2361 | (this commit) |
