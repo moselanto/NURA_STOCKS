@@ -1,6 +1,6 @@
 # HANDOVER - NURA Stocks (read this first)
 
-Last updated: 14 Nov 2026, 00:25 EAT, by Town assistant (Ray). Next agent: read this file, then `PRD.md`, then `AGENTS.md`, then the website repo's `AGENTS.md`, `PROJECT-STATUS.md` and `HANDOVER.md` ([moselanto/nurabeauty.co.ke](https://github.com/moselanto/nurabeauty.co.ke)).
+Last updated: 14 Nov 2026, 00:40 EAT, by Town assistant (Ray). Next agent: read this file, then `PRD.md`, then `AGENTS.md`, then the website repo's `AGENTS.md`, `PROJECT-STATUS.md` and `HANDOVER.md` ([moselanto/nurabeauty.co.ke](https://github.com/moselanto/nurabeauty.co.ke)).
 
 ## 1. What this project is
 
@@ -17,7 +17,7 @@ Website live versions at hand-over: theme 1.134.0, plugin `nura-experience` 1.10
 | Opening stock register XLSX | Done, **v4.0** (`data/`) - actual making costs |
 | Opening stock CSV + notes | Done, match v4.0 |
 | Stock lines -> website products mapping | Draft (`data/opening-stock-woocommerce-map.md`), 6 lines unmatched |
-| **NURA Desk Stock tab (code)** | **Not started. Owner said "use defaults, start building" on 13 Nov.** This is the next job. |
+| **NURA Desk Stock tab (code)** | **Built 14 Nov as plugin 1.110.0, PHP lint clean. In this repo under `nura-experience/` only - NOT yet in the website repo, NOT yet installed or tested on the live site.** |
 
 ## 3. Stock figures (source of truth: `data/opening-stock-2026-11-13.csv`)
 
@@ -75,7 +75,24 @@ Spreadsheet conventions the owner asked for: "very professional, international s
 - **PHP lint:** the sandbox has no PHP; a static PHP 8.3 CLI downloads from `https://dl.static-php.dev/static-php-cli/common/php-8.3.13-cli-linux-x86_64.tar.gz` (worked 13 Nov). Run `php -l` on every changed file.
 - The live store could not be fetched from the agent tools on 13 Nov (SSL errors from the sandbox and web fetch); product IDs/colours came from `nura-experience/data/wa-catalogue.php`. Verify in wp-admin.
 
-### Suggested Phase 1 shape (from PRD, with defaults)
+## 6a. What was built (plugin 1.110.0, 14 Nov 2026)
+
+Files in this repo (same paths as the website repo; base = website `main` at e586a6c, plugin 1.109.4):
+- `nura-experience/includes/class-nura-desk-stock.php` (new, `NURAX_Desk_Stock`, page `nurax-stock`): tables `{prefix}nurax_stock_moves` (history) and `{prefix}nurax_stock_res` (WhatsApp holds), DBV 1.0.0 / option `nurax_stock_db`.
+  - Screens: Stock list (On shelf, Reserved split plan/WhatsApp, Available, Where, status, last change, filters, totals), Stock-take, History (latest 300), Held for orders, Opening buying prices (owner only). CSV downloads for stock and history.
+  - Change form needs a reason (received, returned, found, damaged, lost, own use, returned to supplier, count down, stock-take). Move between places changes the split only.
+  - Places: Desk settings "Stock places" (one per line, default "Studio"); split stored in product/variation meta `_nura_stock_loc`.
+  - WhatsApp: reserve on `nurax_wa_order_saved` (decrease WC stock, hold `active`); `_nwo_pay`=paid -> `sold`; `_nwo_status`=cancelled -> stock back, `released`; `_nwo_wc_order` set by the till -> released first (WC order deducts itself). Paystack-paid orders go straight to `sold`. Only stock-managed items are held.
+  - Plans: read-only, counts `stock_reserved = 1` rows. On shelf = WC stock + plan holds + active WhatsApp holds.
+  - Every other WC stock change (orders, product edits) is logged via `woocommerce_*_set_stock` hooks.
+  - Opening buying prices: sets `_nura_cost` on matched colours of products 364, 243, 274, 377 to the v4.0 averages (1930.59 / 1602.50 / 2483.33 / 2450.00). Unmatched lines (Bob Amanda, Empress, Wonderful Frontal, Negatron, LWF 2/30) excluded. Does not change stock numbers.
+- `nura-experience/includes/class-nura-desk.php`: Stock tab in `header()`, page in `assets()` list, `stock_places` default/field/save.
+- `nura-experience/includes/class-nura-staff.php`: permission `stock` (default on for shop managers), label, log area `stock`, perms form group "Stock".
+- `nura-experience/nura-experience.php`: require + `new NURAX_Desk_Stock()`, version 1.110.0.
+
+Release still to do: copy these 4 files into moselanto/nurabeauty.co.ke, update its HANDOVER/PROJECT-STATUS/README, build the zip, owner installs. Test: website checkout, till sale + void, WhatsApp order (place, mark paid, cancel, convert at till), payment plan reserve/cancel, sourced sale, stock-take, move, CSV downloads. Note: existing open WhatsApp orders placed before 1.110.0 are NOT held retroactively.
+
+### Original Phase 1 shape (from PRD, with defaults)
 
 New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, page `nurax-stock`, own `DBV` + `dbDelta()`):
 - Tables: `nurax_stock_moves` (time, product_id, variation_id, delta, before, after, reason, source, ref, location, user_id, note) and `nurax_stock_res` (source `wa`, ref post ID, product/variation, qty, status `active|sold|released`).
@@ -85,6 +102,8 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 - Release: bump plugin to 1.110.0, update website `HANDOVER.md`, `PROJECT-STATUS.md`, README; build zip; owner installs. Test checkout, till sale + void, WhatsApp order, payment plan reserve/cancel, sourced sale (AGENTS.md rule 2).
 
 ## 7. Waiting on the owner
+
+- 14 Nov message left blanks: which Loose Wave Frontal gets the colour-30 cost (3,210), which piece gets the other LWF 2,300, which Bone Straight colour gets the 3,100, and which product carries the extra KES 200. Register stays v4.0 until answered.
 
 - Which product line carries the extra KES 200 (written totals 75,065 / 85,375 vs line amounts 74,865 / 85,175).
 
@@ -104,4 +123,5 @@ New `nura-experience/includes/class-nura-desk-stock.php` (`NURAX_Desk_Stock`, pa
 | 13 Nov 2026 | Ray | v3.0: only the 26 delivered pieces on shelf; 17 awaiting; 43 book total; CSV/md updated | c5cffd4, 3679da1 |
 | 13 Nov 2026 | Ray | v3.1 Dashboard with charts | 44d3fa6 |
 | 13 Nov 2026 | Ray | HANDOVER.md for the next agent; README/PRD refreshed | 594afa3 |
-| 14 Nov 2026 | Ray | v4.0: actual making costs per product line, weighted average cost per piece; CSV, md, HANDOVER updated | (this commit) |
+| 14 Nov 2026 | Ray | v4.0: actual making costs per product line, weighted average cost per piece; CSV, md, HANDOVER updated | 6c9ae35 |
+| 14 Nov 2026 | Ray | Stock tab built (plugin 1.110.0) in `nura-experience/`; not yet released | (this commit) |
