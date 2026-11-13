@@ -113,7 +113,7 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 
 ## 7. Waiting on the owner
 
-- Selling prices for Bob Amanda (Black, 33), 2x2 Negatron 1/30 and Loose Wave Frontal 2/30 (owner will send). Then: set prices, tick Enabled on variation #2369, publish drafts #2364 and #2367 when ready.
+- Photos and real details (hair type, length, lace size, texture) for Bob Amanda #2364 and 2x2 Negatron Closure #2367, then publish them. Selling prices set 14 Nov: Bob Amanda Black/33 KSh 4,000, Negatron 1/30 KSh 1,800, LWF 2/30 KSh 3,500 (LWF 2/30 enabled and live). Alibaba photos were asked for, but no exact supplier listing was found and the house rule is real photos only.
 
 
 
@@ -140,4 +140,5 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 | 14 Nov 2026 | Ray | 1.110.0 installed and tested by owner; released to website repo 5f0e709 | 0f80e9c |
 | 14 Nov 2026 | Ray | 1.110.1 menu fix; 22 pieces tracked live, buying prices loaded, test order #2361 | 9ef86b2 |
 | 14 Nov 2026 | Ray | Plugin 1.110.2 (cancel restores name the order; C199J buying price) installed and tested | 22230fc |
-| 14 Nov 2026 | Ray | Draft products for the 4 unmatched pieces (stock 26 on shelf); stock places stay Studio | (this commit) |
+| 14 Nov 2026 | Ray | Draft products for the 4 unmatched pieces (stock 26 on shelf); stock places stay Studio | 21b9fbb |
+| 14 Nov 2026 | Ray | Selling prices set; LWF 2/30 enabled; photos pending | (this commit) |
