@@ -29,6 +29,6 @@ Total on hand: **41 pieces**. Pending from supplier: 2 (Loose Wave Frontal Burgu
 | Empress | C1B (colour 1B) | 1 | resolved | Colour 1B confirmed by owner |
 | Empress | C1/33 (colour 1/33) | 1 | resolved |  |
 | New Trials - Wonderful Frontal | Black | 1 | resolved |  |
-| New Trials - 2x2 Negatron | Colour 1/30 | 1 | confirm | Colour confirmed 1/30; quantity assumed 1 |
+| New Trials - 2x2 Negatron | Colour 1/30 | 1 | resolved | Colour 1/30, 1 piece confirmed by owner |
 
-To confirm: 2x2 Negatron colour 1/30 quantity (assumed 1).
+All lines confirmed by the owner on 2026-11-13.
