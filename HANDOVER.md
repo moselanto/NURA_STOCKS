@@ -58,6 +58,7 @@ Spreadsheet conventions the owner asked for: "very professional, international s
 3. **WhatsApp orders: reserve the piece when the order is placed; take it off the shelf when paid; release it if cancelled.**
 4. Shop managers may change stock (adjust, receive, stock-take, move) as well as the owner; every change needs a reason and is logged.
 5. Care products are counted the same way as wigs.
+8. (14 Nov) Nothing goes out of stock by itself; customers can order any quantity; only staff Stop selling shows Out of stock.
 6. Payment-plan stock shows as **Reserved** in its own column. Available = On shelf - Reserved.
 7. **Leave the 6 unmatched lines unloaded until the owner decides** (see section 7).
 
@@ -111,6 +112,10 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 - **Stock places decision (owner):** all stock is kept at the Studio; Stock places stays just 'Studio'. 'Not placed yet' on the Stock list means Studio (split is written only when stock changes).
 - Section 7 mapping items for these 4 lines are resolved (products created).
 
+## 6d. Owner rule: never out of stock by itself (14 Nov 2026)
+
+Stock held is samples to understand the trend; suppliers are on standby. Customers may order any quantity even when the shop holds 1-2. Plugin 1.111.0: tracked items keep selling at 0 (backorder shown as In stock), Available can go below 0 and the Stock list says 'Order from supplier'; only staff 'Stop selling' on the Stock tab shows Out of stock (reason required, logged). Setting 'Never show Out of stock by itself' (default on). Tested live with order #2371 (cancelled) and a qty-5 cart on Burgundy (2 in stock). Detail: website repo HANDOVER 14 Nov 01:40.
+
 ## 7. Waiting on the owner
 
 - Photos and real details (hair type, length, lace size, texture) for Bob Amanda #2364 and 2x2 Negatron Closure #2367, then publish them. Selling prices set 14 Nov: Bob Amanda Black/33 KSh 4,000, Negatron 1/30 KSh 1,800, LWF 2/30 KSh 3,500 (LWF 2/30 enabled and live). Alibaba photos were asked for, but no exact supplier listing was found and the house rule is real photos only.
@@ -141,4 +146,5 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 | 14 Nov 2026 | Ray | 1.110.1 menu fix; 22 pieces tracked live, buying prices loaded, test order #2361 | 9ef86b2 |
 | 14 Nov 2026 | Ray | Plugin 1.110.2 (cancel restores name the order; C199J buying price) installed and tested | 22230fc |
 | 14 Nov 2026 | Ray | Draft products for the 4 unmatched pieces (stock 26 on shelf); stock places stay Studio | 21b9fbb |
-| 14 Nov 2026 | Ray | Selling prices set; LWF 2/30 enabled; photos pending | (this commit) |
+| 14 Nov 2026 | Ray | Selling prices set; LWF 2/30 enabled; photos pending | 6e845e4 |
+| 14 Nov 2026 | Ray | Plugin 1.111.0: never out of stock by itself; Stop selling | (this commit) |
