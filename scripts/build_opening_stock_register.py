@@ -14,7 +14,7 @@ LOGO = os.path.join(ROOT, "assets", "NURA_Beauty_Compact_Logo_Flat_Full_Colour_3
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "data", "NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx")
 TMP = os.path.join(ROOT, "assets")
 
-DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "2.2", "2026-11-13"
+DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "3.0", "2026-11-13"
 
 # product line code -> (product name, unit cost KES)
 LINES = {
@@ -158,10 +158,11 @@ def setup_print(ws, landscape=True, repeat=None):
 rows = []
 for i, (lc, col, cc, o, r, rem) in enumerate(ITEMS):
     name, cost = LINES[lc]
+    r = DELIVERED.get((lc, cc), 0)   # only the 2026-11-13 delivery is on the shelf
+    if r == 0:
+        rem = "Not yet received from supplier."
     pend, over = max(o - r, 0), max(r - o, 0)
-    status = "Part-received" if pend else ("Over-delivered" if over else "Received in full")
-    if (lc, cc) not in DELIVERED:
-        rem = (rem + " " if rem else "") + "Shelf stock held before the 2026-11-13 delivery."
+    status = "Awaiting delivery" if r == 0 else "Part-received" if pend else ("Over-delivered" if over else "Received in full")
     rows.append(dict(n=i + 1, sku=f"NURA-{lc}-{cc}", lc=lc, name=name, col=col, cc=cc, o=o, r=r, pend=pend,
                      over=over, oh=r, cost=cost, val=r * cost, status=status, rem=rem))
 T = {k: sum(x[k] for x in rows) for k in ("o", "r", "pend", "over", "oh", "val")}
@@ -202,7 +203,7 @@ for k, x in enumerate(rows):
     reg.write(r, 10, "PCS", c_ctr)
     reg.write_number(r, 11, x["cost"], c_in)
     reg.write_formula(r, 12, f"=J{e}*L{e}", c_money, x["val"])
-    reg.write_formula(r, 13, f'=IF(H{e}>0,"Part-received",IF(I{e}>0,"Over-delivered","Received in full"))', c_ctr, x["status"])
+    reg.write_formula(r, 13, f'=IF(G{e}=0,"Awaiting delivery",IF(H{e}>0,"Part-received",IF(I{e}>0,"Over-delivered","Received in full")))', c_ctr, x["status"])
     reg.write(r, 14, x["rem"], c_rem)
 LAST = R0 + len(rows) - 1; TR = LAST + 1; a, b = R0 + 1, LAST + 1
 tot = f(bold=True, bg_color=CREAM, top=2, top_color=GOLD, bottom=6, bottom_color=GOLD, align="center", num_format="#,##0")
@@ -242,7 +243,7 @@ top = header_band(s, len(scol), "OPENING STOCK", "Stock-take summary and valuati
 r = top
 for k, (l, v) in enumerate([("Entity", "NURA CROWN & BEAUTY (BN-MJS7ALRV), trading as NURA Beauty"),
                             ("Location", "NURA Studio, Stanbank House, 2nd Floor, Room 20, Nairobi CBD, Kenya"),
-                            ("Count date", AS_AT + " (physical count, owner's stock book; all lines confirmed by owner)"),
+                            ("Count date", AS_AT + " (physical count: only the 26 pieces delivered today are on the shelf)"),
                             ("Measurement basis", "Lower of cost and net realisable value (IAS 2 / IFRS for SMEs s.13); cost = landed buying price")]):
     s.write(r + k, 1, l, lab); s.write(r + k, 2, v, txt)
 r += 5
@@ -252,7 +253,7 @@ kvg = f(bold=True, font_size=18, font_color=GOLD, bg_color=CREAM, align="center"
 s.set_row(r, 26); s.set_row(r + 1, 36)
 kpis = [("Stock value at cost (KES)", f"={REG}M{TR+1}", T["val"], kvg),
         ("Stock on hand (pcs)", f"={REG}J{TR+1}", T["oh"], kv),
-        ("Colour SKUs", f"=COUNTA({REG}B{a}:B{b})", len(rows), kv),
+        ("Stock book total (pcs)", f"={REG}J{TR+1}+{REG}H{TR+1}", T["oh"] + T["pend"], kv),
         ("Pending delivery (pcs)", f"={REG}H{TR+1}", T["pend"], kv),
         ("Over-delivered (pcs)", f"={REG}I{TR+1}", T["over"], kv)]
 for i, (l, fx, v, fm) in enumerate(kpis):
@@ -307,7 +308,7 @@ for j, (k, x) in enumerate(var):
     v.write_formula(rr, 5, f"={REG}G{src}", cell(z, align="center"), x["r"])
     v.write_formula(rr, 6, f"=F{e}-E{e}", cell(z, align="center", num_format="+#,##0;-#,##0;0", bold=True, font_color="#9C4A00" if x["r"] < x["o"] else "#1F4E79"), x["r"] - x["o"])
     v.write_formula(rr, 7, f"=G{e}*{REG}L{src}", cell(z, align="right", num_format="+#,##0.00;-#,##0.00;0.00"), (x["r"] - x["o"]) * x["cost"])
-    v.write(rr, 8, "Follow up with supplier for the balance due." if x["r"] < x["o"] else "Agree with supplier: keep and pay for the extra piece, or return it.", cell(z, text_wrap=True))
+    v.write(rr, 8, ("Follow up with supplier: nothing received yet." if x["r"] == 0 else "Follow up with supplier for the balance due.") if x["r"] < x["o"] else "Agree with supplier: keep and pay for the extra piece, or return it.", cell(z, text_wrap=True))
 v.write(vr + 2 + len(var), 1, "Variance = received minus ordered. Negative = still due from supplier (not in stock); positive = over-delivered (in stock).", note)
 setup_print(v, True, (vr, vr))
 
@@ -347,12 +348,12 @@ g.write_formula(gl, 7, f"=SUM(H{ga}:H{gb})", tot, sum(q for _, _, q, _ in DELIVE
 g.write_formula(gl, 10, f"=SUM(K{ga}:K{gb})", tot_m, gv)
 g.write(gl + 2, 1, "Reconciliation to opening stock", lab)
 recon = [("Received in this delivery (pcs)", f"=H{gl+1}", sum(q for _, _, q, _ in DELIVERY)),
-         ("Shelf stock held before the delivery (pcs)", f"={REG}J{TR+1}-H{gl+1}", T["oh"] - sum(q for _, _, q, _ in DELIVERY)),
-         ("Opening stock on hand (pcs)", f"={REG}J{TR+1}", T["oh"])]
+         ("Not yet received from supplier (pcs)", f"={REG}H{TR+1}", T["pend"]),
+         ("Total per stock book (pcs)", f"=H{gl+4}+H{gl+5}", T["oh"] + T["pend"])]
 for i, (l, fx, val) in enumerate(recon):
     g.write(gl + 3 + i, 2, l, f(bold=(i == 2)))
     g.write_formula(gl + 3 + i, 7, fx, f(bold=(i == 2), align="center", num_format="#,##0", top=(2 if i == 2 else 0), top_color=GOLD), val)
-g.write(gl + 7, 1, "The delivery is already included in the opening stock count; it is not added again. Variance = received minus ordered.", note)
+g.write(gl + 7, 1, "Only this delivery is on the shelf: opening stock on hand = 26 pieces. Variance = received minus ordered.", note)
 g.write(gl + 9, 1, "Received by: ______________________", txt); g.write(gl + 9, 5, "Checked by: ______________________", txt); g.write(gl + 9, 9, "Date: ____________", txt)
 setup_print(g, True, (gr, gr))
 
@@ -373,8 +374,8 @@ notes = [
     ("Item codes (SKU)", "NURA-<product line>-<colour code>, e.g. NURA-LWF-33 = Loose Wave Frontal, colour 33. A slash in a colour code is written as a hyphen (1/33 = 1-33)."),
     ("Colour codes", "1 = jet black, 1B = off black, 2 = darkest brown, 30 / 33 = auburn tones, 99J = burgundy-plum, 613 = blonde, x/y = two-tone (ombre), BUR = burgundy, RW = red wine, PD = piano dark, BLK = black."),
     ("Controls", "Light-yellow cells are inputs; all other figures are formulas. The Summary carries a check that the product-line total equals the register total."),
-    ("Goods received", "26 pieces were delivered on " + AS_AT + " (Goods Received sheet); they are part of the 41-piece opening count, not extra. The other 15 pieces were already on the shelf."),
-    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): logo moved to its own header block (no overlap). v2.1: Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
+    ("Goods received", "26 pieces were delivered on " + AS_AT + " and are the only stock on the shelf. The stock book lists 43 pieces in total; the other 17 have not yet been received from the supplier and are not counted as stock."),
+    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): stock on hand corrected to the 26 pieces received; 17 awaiting delivery. v2.2: logo moved to its own header block (no overlap). v2.1: Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
     ("Next step", "Match each SKU to its WooCommerce product and colour option and load these counts and buying prices as the NURA Desk stock-take."),
 ]
 for i, (l, t) in enumerate(notes):
