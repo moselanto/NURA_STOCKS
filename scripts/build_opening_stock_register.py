@@ -14,7 +14,7 @@ LOGO = os.path.join(ROOT, "assets", "NURA_Beauty_Compact_Logo_Flat_Full_Colour_3
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "data", "NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx")
 TMP = os.path.join(ROOT, "assets")
 
-DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "3.0", "2026-11-13"
+DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "3.1", "2026-11-13"
 
 # product line code -> (product name, unit cost KES)
 LINES = {
@@ -357,6 +357,86 @@ g.write(gl + 7, 1, "Only this delivery is on the shelf: opening stock on hand = 
 g.write(gl + 9, 1, "Received by: ______________________", txt); g.write(gl + 9, 5, "Checked by: ______________________", txt); g.write(gl + 9, 9, "Date: ____________", txt)
 setup_print(g, True, (gr, gr))
 
+
+# =====================================================================  DASHBOARD (charts)
+d = wb.add_worksheet("Dashboard")
+for i, w in enumerate([3, 30, 12, 12, 12, 16, 16, 3, 12, 12, 12, 12, 12, 12, 3]):
+    d.set_column(i, i, w)
+dr = header_band(d, 15, "STOCK DASHBOARD", "Charts of the opening stock position at cost (KES) and in pieces", 64, [18, 24, 18, 18], [px(w) for w in [3, 30, 12]])
+PAL = ["#C9972C", "#0E0E0E", "#8C6A1F", "#6B6B6B", "#E0C27A", "#3D2E0E", "#A8A8A8", "#D9B860"]
+# chart data table (linked to the Stock Register)
+d.merge_range(dr, 1, dr, 6, "CHART DATA (linked to the Stock Register)", sec)
+dh = ["Product line", "Ordered", "On shelf", "Awaiting vendor", "Value on shelf (KES)", "Value awaiting (KES)"]
+d.set_row(dr + 1, 30)
+for i, h in enumerate(dh):
+    d.write(dr + 1, 1 + i, h, hdr)
+rng = lambda L: f"{REG}${L}${a}:${L}${b}"
+d0 = dr + 2
+for k, (lc, (name, cost)) in enumerate(LINES.items()):
+    its = [x for x in rows if x["lc"] == lc]; rr = d0 + k; e = rr + 1; z = k % 2
+    d.write(rr, 1, name, cell(z))
+    d.write_formula(rr, 2, f'=SUMIF({rng("C")},B{e},{rng("F")})', cell(z, align="center", num_format="#,##0"), sum(x["o"] for x in its))
+    d.write_formula(rr, 3, f'=SUMIF({rng("C")},B{e},{rng("J")})', cell(z, align="center", num_format="#,##0"), sum(x["oh"] for x in its))
+    d.write_formula(rr, 4, f'=SUMIF({rng("C")},B{e},{rng("H")})', cell(z, align="center", num_format="#,##0"), sum(x["pend"] for x in its))
+    d.write_formula(rr, 5, f'=SUMIF({rng("C")},B{e},{rng("M")})', cell(z, align="right", num_format="#,##0"), sum(x["val"] for x in its))
+    d.write_formula(rr, 6, f'=E{e}*{cost}', cell(z, align="right", num_format="#,##0"), sum(x["pend"] for x in its) * cost)
+dl = d0 + len(LINES)
+d.write(dl, 1, "TOTAL", tot_l)
+for c, key in ((2, "o"), (3, "oh"), (4, "pend")):
+    L = chr(65 + c); d.write_formula(dl, c, f"=SUM({L}{d0+1}:{L}{dl})", tot, T[key])
+d.write_formula(dl, 5, f"=SUM(F{d0+1}:F{dl})", tot_m, T["val"])
+d.write_formula(dl, 6, f"=SUM(G{d0+1}:G{dl})", tot_m, T["pend_val"])
+# pie data: only lines with stock on shelf (zero slices clutter a pie)
+pie_rows = [k for k, lc in enumerate(LINES) if sum(x["val"] for x in rows if x["lc"] == lc) > 0]
+pr0 = dl + 2
+d.write(pr0, 1, "Pie data: product lines with stock on shelf", lab)
+for j, k in enumerate(pie_rows):
+    src = d0 + k + 1
+    d.write_formula(pr0 + 1 + j, 1, f"=B{src}", cell(j % 2), list(LINES.values())[k][0])
+    d.write_formula(pr0 + 1 + j, 2, f"=F{src}", cell(j % 2, align="right", num_format="#,##0"), sum(x["val"] for x in rows if x["lc"] == list(LINES)[k]))
+pe = pr0 + len(pie_rows)
+d.write(pe + 2, 2, "Status", lab); d.write(pe + 2, 3, "Pieces", lab)
+d.write(pe + 3, 2, "On shelf", cell(False)); d.write_formula(pe + 3, 3, f"=D{dl+1}", cell(False, align="center"), T["oh"])
+d.write(pe + 4, 2, "Awaiting vendor", cell(True)); d.write_formula(pe + 4, 3, f"=E{dl+1}", cell(True, align="center"), T["pend"])
+SH = "Dashboard"
+def style(ch, title):
+    ch.set_title({"name": title, "name_font": {"name": FONT, "size": 12, "bold": True, "color": INK}})
+    ch.set_chartarea({"border": {"color": LINE}, "fill": {"color": "#FFFFFF"}})
+    ch.set_legend({"position": "bottom", "font": {"name": FONT, "size": 9}})
+    return ch
+# 1. Pie: value on shelf by product line
+c1 = style(wb.add_chart({"type": "pie"}), "Stock value on shelf by product line (KES)")
+c1.add_series({"name": "Value on shelf", "categories": [SH, pr0 + 1, 1, pe, 1], "values": [SH, pr0 + 1, 2, pe, 2],
+               "points": [{"fill": {"color": PAL[i % len(PAL)]}, "border": {"color": "#FFFFFF"}} for i in range(len(pie_rows))],
+               "data_labels": {"percentage": True, "leader_lines": True, "position": "best_fit", "font": {"name": FONT, "size": 9, "bold": True}}})
+# 2. Doughnut: on shelf vs awaiting
+c2 = style(wb.add_chart({"type": "doughnut"}), "Stock book: on shelf vs awaiting vendor (pcs)")
+c2.add_series({"name": "Pieces", "categories": [SH, pe + 3, 2, pe + 4, 2], "values": [SH, pe + 3, 3, pe + 4, 3],
+               "points": [{"fill": {"color": GOLD}}, {"fill": {"color": "#BFBFBF"}}],
+               "data_labels": {"value": True, "percentage": True, "separator": "\n", "font": {"name": FONT, "size": 10, "bold": True}}})
+c2.set_hole_size(55)
+# 3. Clustered bar: ordered vs on shelf vs awaiting
+c3 = style(wb.add_chart({"type": "bar"}), "Pieces by product line: ordered, on shelf, awaiting")
+for col, nm, colr in ((2, "Ordered", "#6B6B6B"), (3, "On shelf", GOLD), (4, "Awaiting vendor", "#0E0E0E")):
+    c3.add_series({"name": nm, "categories": [SH, d0, 1, dl - 1, 1], "values": [SH, d0, col, dl - 1, col],
+                   "fill": {"color": colr}, "gap": 60, "data_labels": {"value": True, "font": {"name": FONT, "size": 8}}})
+c3.set_x_axis({"name": "Pieces", "major_gridlines": {"visible": True, "line": {"color": "#EEEEEE"}}, "num_font": {"name": FONT, "size": 9}})
+c3.set_y_axis({"reverse": True, "num_font": {"name": FONT, "size": 9}})
+# 4. Stacked column: value on shelf + awaiting (KES)
+c4 = style(wb.add_chart({"type": "column", "subtype": "stacked"}), "Value at cost by product line: on shelf and awaiting (KES)")
+for col, nm, colr in ((5, "Value on shelf", GOLD), (6, "Value awaiting vendor", "#0E0E0E")):
+    c4.add_series({"name": nm, "categories": [SH, d0, 1, dl - 1, 1], "values": [SH, d0, col, dl - 1, col], "fill": {"color": colr}, "gap": 70})
+c4.set_y_axis({"num_format": "#,##0", "major_gridlines": {"visible": True, "line": {"color": "#EEEEEE"}}, "num_font": {"name": FONT, "size": 9}})
+c4.set_x_axis({"num_font": {"name": FONT, "size": 8, "rotation": -30}})
+# place charts in a 2 x 2 grid to the right of the data
+for ch, (rw, cl) in ((c1, (dr, 8)), (c2, (dr, 11 + 0)), (c3, (dr + 20, 8)), (c4, (dr + 20, 11))):
+    pass
+d.insert_chart(dr, 8, c1, {"x_scale": 0.95, "y_scale": 1.25, "object_position": 3})
+d.insert_chart(dr + 19, 8, c2, {"x_scale": 0.95, "y_scale": 1.0, "object_position": 3})
+d.insert_chart(pe + 7, 1, c3, {"x_scale": 1.45, "y_scale": 1.3, "object_position": 3})
+d.insert_chart(pe + 7 + 22, 1, c4, {"x_scale": 1.45, "y_scale": 1.3, "object_position": 3})
+setup_print(d, True)
+
 # =====================================================================  NOTES
 nt = wb.add_worksheet("Notes")
 nt.set_column(0, 0, 3); nt.set_column(1, 1, 28); nt.set_column(2, 2, 100)
@@ -375,7 +455,7 @@ notes = [
     ("Colour codes", "1 = jet black, 1B = off black, 2 = darkest brown, 30 / 33 = auburn tones, 99J = burgundy-plum, 613 = blonde, x/y = two-tone (ombre), BUR = burgundy, RW = red wine, PD = piano dark, BLK = black."),
     ("Controls", "Light-yellow cells are inputs; all other figures are formulas. The Summary carries a check that the product-line total equals the register total."),
     ("Goods received", "26 pieces were delivered on " + AS_AT + " and are the only stock on the shelf. The stock book lists 43 pieces in total; the other 17 have not yet been received from the supplier and are not counted as stock."),
-    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): stock on hand corrected to the 26 pieces received; 17 awaiting delivery. v2.2: logo moved to its own header block (no overlap). v2.1: Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
+    ("Document control", DOC_NO + " v" + VERSION + " (" + AS_AT + "): Dashboard with charts added. v3.0: stock on hand corrected to the 26 pieces received; 17 awaiting delivery. v2.2: logo moved to its own header block (no overlap). v2.1: Goods Received note added. v2.0: unit costs and valuation. v1.0: quantities only."),
     ("Next step", "Match each SKU to its WooCommerce product and colour option and load these counts and buying prices as the NURA Desk stock-take."),
 ]
 for i, (l, t) in enumerate(notes):
@@ -385,9 +465,9 @@ for i, (l, t) in enumerate(notes):
     nt.write(rr, 2, t, f(text_wrap=True, valign="top", bottom=1, bottom_color=LINE))
 setup_print(nt, True)
 
-for ws, c in ((s, GOLD), (reg, BLACK), (v, GOLD), (g, BLACK), (nt, MUTED)):
+for ws, c in ((s, GOLD), (reg, BLACK), (v, GOLD), (g, BLACK), (d, GOLD), (nt, MUTED)):
     ws.set_tab_color(c)
-wb.worksheets_objs.sort(key=lambda w: ["Summary", "Stock Register", "Goods Received", "Supplier Variances", "Notes"].index(w.name))
+wb.worksheets_objs.sort(key=lambda w: ["Summary", "Dashboard", "Stock Register", "Goods Received", "Supplier Variances", "Notes"].index(w.name))
 s.activate(); s.set_first_sheet()
 wb.close()
 for fn in os.listdir(TMP):
