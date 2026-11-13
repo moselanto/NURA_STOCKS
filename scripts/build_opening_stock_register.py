@@ -14,19 +14,27 @@ LOGO = os.path.join(ROOT, "assets", "NURA_Beauty_Compact_Logo_Flat_Full_Colour_3
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "data", "NURA-Beauty-Opening-Stock-Register-2026-11-13.xlsx")
 TMP = os.path.join(ROOT, "assets")
 
-DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "3.1", "2026-11-13"
+DOC_NO, VERSION, AS_AT = "NURA-STK-OS-2026-001", "4.0", "2026-11-13"
 
-# product line code -> (product name, unit cost KES)
-LINES = {
-    "LWF":   ("Loose Wave Frontal", 2300),
-    "LW44":  ("Loose Wave 4x4 Closure", 1700),
-    "BSHF":  ("Bone Straight High Fibre", 2550),
-    "BW":    ("Body Wave", 2450),
-    "BOBA":  ("Bob Amanda", 1300),
-    "EMP":   ("Empress", 2000),
-    "WF":    ("Wonderful Frontal (new trial)", 1750),
-    "NEG22": ("2x2 Negatron Closure (new trial)", 1000),
+# product line code -> product name
+NAMES = {
+    "LWF": "Loose Wave Frontal", "LW44": "Loose Wave 4x4 Closure", "BSHF": "Bone Straight High Fibre",
+    "BW": "Body Wave", "BOBA": "Bob Amanda", "EMP": "Empress",
+    "WF": "Wonderful Frontal (new trial)", "NEG22": "2x2 Negatron Closure (new trial)",
 }
+# Actual cost of making each product line (KES), owner 2026-11-13: wigs made from scratch
+# (bundles, ventilation, wig cap, labour). Main batch + additional costs.
+COST_PARTS = {
+    "LWF":   [("Main batch", 26100), ("Extra bundles", 1210), ("Colour 30 (additional)", 3210), ("Another frontal (additional)", 2300)],
+    "LW44":  [("Main batch", 9615)],
+    "BSHF":  [("Main batch", 11800), ("Additional", 3100)],
+    "BW":    [("Main batch", 14700)],
+    "BOBA":  [("Main batch", 7340)],
+    "EMP":   [("Main batch", 4100)],
+    "WF":    [("Additional", 1000)],
+    "NEG22": [("Additional", 700)],
+}
+LINE_TOTAL = {k: sum(a for _, a in v) for k, v in COST_PARTS.items()}
 # line, colour, colour code, ordered, received, remark
 ITEMS = [
     ("LWF", "Black (colour 2)", "2", 3, 3, ""),
@@ -72,6 +80,9 @@ DELIVERY = [
     ("NEG22", "1-30", 1, "Negatron 2x2"),
 ]
 DELIVERED = {(lc, cc): q for lc, cc, q, _ in DELIVERY}
+# Weighted average cost per piece = line total / pieces in the stock book (ordered + any over-delivery)
+BOOK_QTY = {lc: sum(max(o, DELIVERED.get((l2, cc), 0)) for l2, _, cc, o, _, _ in ITEMS if l2 == lc) for lc in NAMES}
+LINES = {lc: (NAMES[lc], LINE_TOTAL[lc] / BOOK_QTY[lc]) for lc in NAMES}
 
 GOLD, BLACK, INK, CREAM, ZEBRA, LINE, MUTED = "#C9972C", "#0E0E0E", "#1F1F1F", "#FBF6EA", "#FAFAFA", "#D9D9D9", "#6B6B6B"
 FONT = "Calibri"
@@ -448,8 +459,9 @@ notes = [
     ("Qty ordered / received", "Ordered = quantity on the supplier order. Received = pieces physically counted. Where no difference was noted, the order was received in full."),
     ("Pending delivery", "Ordered but not yet received. Not owned stock, so not included in stock on hand or stock value; shown separately as stock on order."),
     ("Over-delivered", "Received above the quantity ordered. Included in stock on hand and value; settle the extra piece with the supplier."),
-    ("Measurement (IAS 2)", "Inventories are measured at the lower of cost and net realisable value (IAS 2 Inventories; IFRS for SMEs Section 13). Cost = buying price per piece, plus freight and duty to the studio where not already included. Cost formula: specific identification / FIFO."),
-    ("Unit costs used", "Loose Wave Frontal 2,300; Loose Wave 4x4 Closure 1,700; Bone Straight High Fibre 2,550; Body Wave 2,450; Bob Amanda 1,300; Empress 2,000; Wonderful Frontal 1,750; 2x2 Negatron Closure 1,000 (KES per piece, provided by the owner on " + AS_AT + ")."),
+    ("Measurement (IAS 2)", "Inventories are measured at the lower of cost and net realisable value (IAS 2 Inventories; IFRS for SMEs Section 13). Cost of conversion = materials (bundles, wig cap), ventilation and labour. Cost formula: weighted average cost per product line."),
+    ("Cost of making", "All wigs are made from scratch: bundles, ventilation, wig cap and labour. Actual cost per product line (KES, owner, " + AS_AT + "): " + "; ".join(NAMES[k] + " " + f"{LINE_TOTAL[k]:,.0f}" + (" (" + " + ".join(f"{n.lower()} {a:,.0f}" for n, a in v) + ")" if len(v) > 1 else "") for k, v in COST_PARTS.items()) + ". Total " + f"{sum(LINE_TOTAL.values()):,.0f}" + "."),
+    ("Unit costs used", "Weighted average cost per piece = product line total / pieces in the stock book for that line: " + "; ".join(f"{NAMES[k]} {LINE_TOTAL[k]:,.0f} / {BOOK_QTY[k]} = {LINES[k][1]:,.2f}" for k in NAMES) + "."),
     ("Currency", "Kenya Shilling (KES), ISO 4217. Amounts to 2 decimal places."),
     ("Item codes (SKU)", "NURA-<product line>-<colour code>, e.g. NURA-LWF-33 = Loose Wave Frontal, colour 33. A slash in a colour code is written as a hyphen (1/33 = 1-33)."),
     ("Colour codes", "1 = jet black, 1B = off black, 2 = darkest brown, 30 / 33 = auburn tones, 99J = burgundy-plum, 613 = blonde, x/y = two-tone (ombre), BUR = burgundy, RW = red wine, PD = piano dark, BLK = black."),
