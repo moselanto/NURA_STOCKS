@@ -116,6 +116,13 @@ Owner chose option 1: only the shelf pieces that match a website colour are trac
 
 Stock held is samples to understand the trend; suppliers are on standby. Customers may order any quantity even when the shop holds 1-2. Plugin 1.111.0: tracked items keep selling at 0 (backorder shown as In stock), Available can go below 0 and the Stock list says 'Order from supplier'; only staff 'Stop selling' on the Stock tab shows Out of stock (reason required, logged). Setting 'Never show Out of stock by itself' (default on). Tested live with order #2371 (cancelled) and a qty-5 cart on Burgundy (2 in stock). Detail: website repo HANDOVER 14 Nov 01:40. Plugin 1.111.1 (14 Nov 01:55): shoppers see no 'N in stock' text, only price and Add to bag; a stopped item is stored as Out of stock so wp-admin and the Products stock filter agree (tested on Negatron #2368, undone).
 
+## 6e. Vendor delivery 16 Nov 2026 (recorded 17 Nov, 02:45)
+
+- 10 of the 17 awaiting pieces arrived (owner confirmed the vendor names): Body Wave 613 1, Black 1, Piano Dark 1 (website "Piano"); Loose Wave Frontal Burgundy 1 (vendor "99J"), colour 30 1; Bob Amanda 99J 1, 30 1 (new variations on draft #2364); Empress 1B 1, 1/33 1 (new draft product #2459, buying price 2,055.47); Wonderful Frontal Black 1 (vendor "Black Latisha"; stocked on the Latisha Dupe Frontal Black variation, buying price 1,000). Stock tab On shelf 26 -> 36.
+- Still awaiting the vendor (7): Body Wave Piano Dark 1, 613 1, Black 1; Bone Straight High Fibre 613 2, Piano Dark 2.
+- Accounts: PV-0035 (13 Nov, Stock bought, KSh 81,575) is the balance of the KSh 85,375 order. PV-0016 (3,100) and PV-0025 (700) were already recorded, so the order total in Accounts is exactly 85,375.
+- Care products: buying prices loaded (see website repo HANDOVER 17 Nov 02:45); quantities not tracked yet.
+
 ## 7. Waiting on the owner
 
 - Photos and real details (hair type, length, lace size, texture) for Bob Amanda #2364 and 2x2 Negatron Closure #2367, then publish them. Selling prices set 14 Nov: Bob Amanda Black/33 KSh 4,000, Negatron 1/30 KSh 1,800, LWF 2/30 KSh 3,500 (LWF 2/30 enabled and live). Alibaba photos were asked for, but no exact supplier listing was found and the house rule is real photos only.
